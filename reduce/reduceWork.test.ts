@@ -1,82 +1,174 @@
 import { test, describe, expect } from 'vitest';
-import type { TFinishedSnapshot, TSetupSnapshot, TWorkSnapshot } from '../types/snapshot.type';
+import type {
+  TFinishedSnapshot,
+  TRestSnapshot,
+  TSetupSnapshot,
+  TWorkSnapshot,
+} from '../types/snapshot.type';
 import { machineState } from '../constants/machine.const';
-import type { TRangeFinishEvent, TResetEvent } from '../types/events.type';
+import type { TEvent, TRangeFinishEvent, TResetEvent, TRestStartEvent } from '../types/events.type';
 import { eventType } from '../constants/events.const';
 import { convertHoursToTimestamp } from '../testUtils/convertHoursToTimestamp';
 import { reduceWork } from './reduceWork';
+import { restKind } from '../constants/segment.const';
+import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../testUtils/fixtures';
 
 describe('Тестирование reduceWork', () => {
-  test('Если текущее время БОЛЬШЕ окончания диапазона, при получении события RANGE_FINISH система переходит в состояние FINISHED', () => {
-    const nowMs = convertHoursToTimestamp(19);
+  describe('RESET', () => {
+    test.each([
+      ['now < rangeEnd', convertHoursToTimestamp(8)],
+      ["now >= rangeStart && 'now < rangeEnd", convertHoursToTimestamp(10)],
+      ['now >= rangeEnd', convertHoursToTimestamp(19)],
+    ])('→ SETUP (%s)', (_label, nowMs) => {
+      const workSnapshot: TWorkSnapshot = {
+        state: machineState.WORK,
+        rangeStart,
+        rangeEnd,
+        segmentStart: convertHoursToTimestamp(17),
+        workSegmentCount: 0,
+      };
 
-    const rangeStart = convertHoursToTimestamp(9);
-    const rangeEnd = convertHoursToTimestamp(18);
+      const resetEvent: TResetEvent = {
+        type: eventType.RESET,
+      };
 
-    const workSnapshot: TWorkSnapshot = {
-      state: machineState.WORK,
-      rangeStart,
-      rangeEnd,
-      segmentStart: convertHoursToTimestamp(17),
-      workSegmentCount: 0,
-    };
+      const setupSnapshot: TSetupSnapshot = {
+        state: machineState.SETUP,
+      };
 
-    const rangeFinishEvent: TRangeFinishEvent = {
-      type: eventType.RANGE_FINISH,
-    };
-
-    const finishedSnapshot: TFinishedSnapshot = {
-      state: machineState.FINISHED,
-      rangeStart,
-      rangeEnd,
-    };
-
-    expect(reduceWork(workSnapshot, rangeFinishEvent, nowMs)).toEqual(finishedSnapshot);
+      expect(reduceWork(workSnapshot, resetEvent, nowMs)).toEqual(setupSnapshot);
+    });
   });
 
-  test('Если текущее время МЕНЬШЕ окончания диапазона, при получении события RANGE_FINISH система возвращает исходный snapshot', () => {
-    const nowMs = convertHoursToTimestamp(15);
+  describe('RANGE_FINISH', () => {
+    test.each([
+      ['now = rangeEnd → FINISHED', rangeEnd],
+      ['now > rangeEnd → FINISHED', convertHoursToTimestamp(19)],
+    ])('%s', (_label, nowMs) => {
+      const workSnapshot: TWorkSnapshot = {
+        state: machineState.WORK,
+        rangeStart,
+        rangeEnd,
+        segmentStart: convertHoursToTimestamp(17),
+        workSegmentCount: 0,
+      };
 
-    const rangeStart = convertHoursToTimestamp(9);
-    const rangeEnd = convertHoursToTimestamp(18);
+      const rangeFinishEvent: TRangeFinishEvent = {
+        type: eventType.RANGE_FINISH,
+      };
 
-    const workSnapshot: TWorkSnapshot = {
-      state: machineState.WORK,
-      rangeStart,
-      rangeEnd,
-      segmentStart: convertHoursToTimestamp(14),
-      workSegmentCount: 0,
-    };
+      const finishedSnapshot: TFinishedSnapshot = {
+        state: machineState.FINISHED,
+        rangeStart,
+        rangeEnd,
+      };
 
-    const rangeFinishEvent: TRangeFinishEvent = {
-      type: eventType.RANGE_FINISH,
-    };
+      expect(reduceWork(workSnapshot, rangeFinishEvent, nowMs)).toEqual(finishedSnapshot);
+    });
 
-    expect(reduceWork(workSnapshot, rangeFinishEvent, nowMs)).toEqual(workSnapshot);
+    test('now < rangeEnd → снимок без изменений', () => {
+      const nowMs = convertHoursToTimestamp(15);
+
+      const workSnapshot: TWorkSnapshot = {
+        state: machineState.WORK,
+        rangeStart,
+        rangeEnd,
+        segmentStart: convertHoursToTimestamp(14),
+        workSegmentCount: 0,
+      };
+
+      const rangeFinishEvent: TRangeFinishEvent = {
+        type: eventType.RANGE_FINISH,
+      };
+
+      expect(reduceWork(workSnapshot, rangeFinishEvent, nowMs)).toEqual(workSnapshot);
+    });
   });
 
-  test('При получении события RESET система переходит в состояние SETUP', () => {
-    const nowMs = convertHoursToTimestamp(19);
+  describe('REST_START', () => {
+    test.each([
+      ['now = rangeEnd → снимок без изменений', rangeEnd],
+      ['now > rangeEnd → снимок без изменений', convertHoursToTimestamp(19)],
+    ])('%s', (_label, nowMs) => {
+      const workSnapshot: TWorkSnapshot = {
+        state: machineState.WORK,
+        rangeStart,
+        rangeEnd,
+        segmentStart: convertHoursToTimestamp(17),
+        workSegmentCount: 0,
+      };
 
-    const rangeStart = convertHoursToTimestamp(9);
-    const rangeEnd = convertHoursToTimestamp(18);
+      const restStartEvent: TRestStartEvent = {
+        type: eventType.REST_START,
+        restKind: restKind.LONG,
+      };
 
-    const workSnapshot: TWorkSnapshot = {
-      state: machineState.WORK,
-      rangeStart,
-      rangeEnd,
-      segmentStart: convertHoursToTimestamp(17),
-      workSegmentCount: 0,
-    };
+      expect(reduceWork(workSnapshot, restStartEvent, nowMs)).toEqual(workSnapshot);
+    });
 
-    const rangeFinishEvent: TResetEvent = {
-      type: eventType.RESET,
-    };
+    test('now < rangeEnd → REST', () => {
+      const nowMs = convertHoursToTimestamp(15);
 
-    const setupSnapshot: TSetupSnapshot = {
-      state: machineState.SETUP,
-    };
+      const workSnapshot: TWorkSnapshot = {
+        state: machineState.WORK,
+        rangeStart,
+        rangeEnd,
+        segmentStart: convertHoursToTimestamp(14),
+        workSegmentCount: 2,
+      };
 
-    expect(reduceWork(workSnapshot, rangeFinishEvent, nowMs)).toEqual(setupSnapshot);
+      const restStartEvent: TRestStartEvent = {
+        type: eventType.REST_START,
+        restKind: restKind.LONG,
+      };
+
+      const restSnapshot: TRestSnapshot = {
+        state: machineState.REST,
+        rangeStart,
+        rangeEnd,
+        restKind: restKind.LONG,
+        segmentStart: nowMs,
+        workSegmentCount: 3,
+      };
+
+      expect(reduceWork(workSnapshot, restStartEvent, nowMs)).toEqual(restSnapshot);
+    });
+  });
+
+  describe('INVALID EVENTS', () => {
+    test.each([
+      [
+        'SETUP_START → снимок без изменений',
+        {
+          type: eventType.SETUP_START,
+          startMinutes,
+          endMinutes,
+        },
+      ],
+      [
+        'WORK_START → снимок без изменений',
+        {
+          type: eventType.WORK_START,
+        },
+      ],
+      [
+        'FINISH_CONFIRM → снимок без изменений',
+        {
+          type: eventType.FINISH_CONFIRM,
+        },
+      ],
+    ])('%s', (_label: string, event: TEvent) => {
+      const nowMs = convertHoursToTimestamp(15);
+
+      const workSnapshot: TWorkSnapshot = {
+        state: machineState.WORK,
+        rangeStart,
+        rangeEnd,
+        segmentStart: convertHoursToTimestamp(14),
+        workSegmentCount: 2,
+      };
+
+      expect(reduceWork(workSnapshot, event, nowMs)).toEqual(workSnapshot);
+    });
   });
 });
