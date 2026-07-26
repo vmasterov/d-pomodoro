@@ -7,7 +7,7 @@ import type { TRestKind } from '../types/common.type';
 export function remainingMs(snapshot: TWorkSnapshot | TRestSnapshot, nowMs: number): number {
   const duration =
     snapshot.state === machineState.WORK ? workDuration : restDuration[snapshot.restKind];
-  return snapshot.segmentStart + duration * MS_PER_MINUTE - nowMs;
+  return duration * MS_PER_MINUTE + snapshot.segmentStart - nowMs;
 }
 
 export function isRangeOver(rangeEnd: number, nowMs: number): boolean {
