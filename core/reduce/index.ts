@@ -1,11 +1,11 @@
-import type { TSnapshot } from '../types/snapshot.type';
-import type { TEvent } from '../types/events.type';
+import type { TSnapshot } from '@core/types/snapshot.type';
+import type { TEvent } from '@core/types/events.type';
 import { reduceSetup } from './reduceSetup';
 import { reducePending } from './reducePending';
 import { reduceWork } from './reduceWork';
 import { reduceRest } from './reduceRest';
 import { reduceFinished } from './reduceFinished';
-import { machineState } from '../constants/machine.const';
+import { machineState } from '@core/constants/machine.const';
 
 export function reduce(snapshot: TSnapshot, event: TEvent, nowMs: number): TSnapshot {
   switch (snapshot.state) {

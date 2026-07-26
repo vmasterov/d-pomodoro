@@ -1,8 +1,8 @@
-import type { TPendingSnapshot, TSnapshot } from '../types/snapshot.type';
-import type { TEvent } from '../types/events.type';
-import { machineState } from '../constants/machine.const';
-import { reduceDefault } from '../utils/reduce/reduceDefault.util';
-import { eventType } from '../constants/events.const';
+import type { TPendingSnapshot, TSnapshot } from '@core/types/snapshot.type';
+import type { TEvent } from '@core/types/events.type';
+import { machineState } from '@core/constants/machine.const';
+import { reduceDefault } from '@core/utils/reduce/reduceDefault.util';
+import { eventType } from '@core/constants/events.const';
 
 export function reducePending(snapshot: TPendingSnapshot, event: TEvent, nowMs: number): TSnapshot {
   switch (event.type) {

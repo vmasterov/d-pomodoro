@@ -1,8 +1,8 @@
-import type { TEvent } from '../types/events.type';
-import type { TRestSnapshot, TSnapshot } from '../types/snapshot.type';
-import { eventType } from '../constants/events.const';
-import { machineState } from '../constants/machine.const';
-import { reduceDefault } from '../utils/reduce/reduceDefault.util';
+import type { TEvent } from '@core/types/events.type';
+import type { TRestSnapshot, TSnapshot } from '@core/types/snapshot.type';
+import { eventType } from '@core/constants/events.const';
+import { machineState } from '@core/constants/machine.const';
+import { reduceDefault } from '@core/utils/reduce/reduceDefault.util';
 
 export function reduceRest(snapshot: TRestSnapshot, event: TEvent, nowMs: number): TSnapshot {
   switch (event.type) {

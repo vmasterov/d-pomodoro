@@ -1,12 +1,12 @@
 import { test, describe, expect } from 'vitest';
 import { reduceFinished } from './reduceFinished';
-import { machineState } from '../constants/machine.const';
-import { eventType } from '../constants/events.const';
-import type { TFinishedSnapshot, TSetupSnapshot } from '../types/snapshot.type';
-import type { TEvent, TFinishConfirmEvent } from '../types/events.type';
-import { convertHoursToTimestamp } from '../../testUtils/convertHoursToTimestamp';
-import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../../testUtils/fixtures';
-import { restKind } from '../constants/segment.const';
+import { machineState } from '@core/constants/machine.const';
+import { eventType } from '@core/constants/events.const';
+import type { TFinishedSnapshot, TSetupSnapshot } from '@core/types/snapshot.type';
+import type { TEvent, TFinishConfirmEvent } from '@core/types/events.type';
+import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
+import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
+import { restKind } from '@core/constants/segment.const';
 
 const finishedSnapshot: TFinishedSnapshot = {
   state: machineState.FINISHED,

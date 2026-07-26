@@ -1,17 +1,22 @@
 import { test, describe, expect } from 'vitest';
 import { reduceRest } from './reduceRest';
-import { machineState } from '../constants/machine.const';
-import { eventType } from '../constants/events.const';
+import { machineState } from '@core/constants/machine.const';
+import { eventType } from '@core/constants/events.const';
 import type {
   TFinishedSnapshot,
   TRestSnapshot,
   TSetupSnapshot,
   TWorkSnapshot,
-} from '../types/snapshot.type';
-import type { TEvent, TRangeFinishEvent, TResetEvent, TWorkStartEvent } from '../types/events.type';
-import { convertHoursToTimestamp } from '../../testUtils/convertHoursToTimestamp';
-import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../../testUtils/fixtures';
-import { restKind } from '../constants/segment.const';
+} from '@core/types/snapshot.type';
+import type {
+  TEvent,
+  TRangeFinishEvent,
+  TResetEvent,
+  TWorkStartEvent,
+} from '@core/types/events.type';
+import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
+import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
+import { restKind } from '@core/constants/segment.const';
 
 const restSnapshot: TRestSnapshot = {
   state: machineState.REST,

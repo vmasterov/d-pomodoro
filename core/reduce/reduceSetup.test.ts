@@ -1,10 +1,10 @@
 import { test, describe, expect } from 'vitest';
 import { reduceSetup } from './reduceSetup';
-import { machineState } from '../constants/machine.const';
-import { eventType } from '../constants/events.const';
-import type { TPendingSnapshot, TSetupSnapshot, TWorkSnapshot } from '../types/snapshot.type';
-import type { TEvent, TSetupStartEvent } from '../types/events.type';
-import { convertHoursToTimestamp } from '../../testUtils/convertHoursToTimestamp';
+import { machineState } from '@core/constants/machine.const';
+import { eventType } from '@core/constants/events.const';
+import type { TPendingSnapshot, TSetupSnapshot, TWorkSnapshot } from '@core/types/snapshot.type';
+import type { TEvent, TSetupStartEvent } from '@core/types/events.type';
+import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import {
   rangeStart,
   rangeEnd,
@@ -12,8 +12,8 @@ import {
   rangeEndTomorrow,
   startMinutes,
   endMinutes,
-} from '../../testUtils/fixtures';
-import { restKind } from '../constants/segment.const';
+} from '@testUtils/fixtures';
+import { restKind } from '@core/constants/segment.const';
 
 const setupSnapshot: TSetupSnapshot = {
   state: machineState.SETUP,
@@ -55,7 +55,7 @@ describe('Тестирование reduceSetup', () => {
     });
 
     test.each([
-      // ['now = rangeEnd', rangeEnd],
+      ['now = rangeEnd', rangeEnd],
       ['now > rangeEnd', convertHoursToTimestamp(19)],
     ])('%s → PENDING (диапазон на завтра)', (_label, nowMs) => {
       const pendingSnapshot: TPendingSnapshot = {
