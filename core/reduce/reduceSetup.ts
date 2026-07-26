@@ -1,9 +1,9 @@
-import type { TSetupSnapshot, TSnapshot } from '../types/snapshot.type';
-import type { TEvent } from '../types/events.type';
-import { eventType } from '../constants/events.const';
-import { convertMinutesToTimestamp } from '../utils/date.util';
-import { machineState } from '../constants/machine.const';
-import { reduceDefault } from '../utils/reduce/reduceDefault.util';
+import type { TSetupSnapshot, TSnapshot } from '@core/types/snapshot.type';
+import type { TEvent } from '@core/types/events.type';
+import { eventType } from '@core/constants/events.const';
+import { convertMinutesToTimestamp } from '@core/utils/date.util';
+import { machineState } from '@core/constants/machine.const';
+import { reduceDefault } from '@core/utils/reduce/reduceDefault.util';
 
 export function reduceSetup(snapshot: TSetupSnapshot, event: TEvent, nowMs: number): TSnapshot {
   if (event.type !== eventType.SETUP_START) {
