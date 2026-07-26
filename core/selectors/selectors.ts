@@ -1,8 +1,8 @@
-import type { TWorkSnapshot, TRestSnapshot } from './types/snapshot.type';
-import { MS_PER_MINUTE } from './constants/common.const';
-import { machineState } from './constants/machine.const';
-import { workDuration, restDuration, restKind } from './constants/segment.const';
-import type { TRestKind } from './types/common.type';
+import type { TWorkSnapshot, TRestSnapshot } from '../types/snapshot.type';
+import { MS_PER_MINUTE } from '../constants/common.const';
+import { machineState } from '../constants/machine.const';
+import { workDuration, restDuration, restKind } from '../constants/segment.const';
+import type { TRestKind } from '../types/common.type';
 
 export function remainingMs(snapshot: TWorkSnapshot | TRestSnapshot, nowMs: number): number {
   const duration =

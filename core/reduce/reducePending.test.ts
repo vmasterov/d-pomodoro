@@ -1,28 +1,25 @@
 import { test, describe, expect } from 'vitest';
-import { reduceRest } from './reduceRest';
+import { reducePending } from './reducePending';
 import { machineState } from '../constants/machine.const';
 import { eventType } from '../constants/events.const';
 import type {
   TFinishedSnapshot,
-  TRestSnapshot,
+  TPendingSnapshot,
   TSetupSnapshot,
   TWorkSnapshot,
 } from '../types/snapshot.type';
 import type { TEvent, TRangeFinishEvent, TResetEvent, TWorkStartEvent } from '../types/events.type';
-import { convertHoursToTimestamp } from '../testUtils/convertHoursToTimestamp';
-import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../testUtils/fixtures';
+import { convertHoursToTimestamp } from '../../testUtils/convertHoursToTimestamp';
+import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../../testUtils/fixtures';
 import { restKind } from '../constants/segment.const';
 
-const restSnapshot: TRestSnapshot = {
-  state: machineState.REST,
+const pendingSnapshot: TPendingSnapshot = {
   rangeStart,
   rangeEnd,
-  restKind: restKind.LONG,
-  segmentStart: convertHoursToTimestamp(14),
-  workSegmentCount: 2,
+  state: machineState.PENDING,
 };
 
-describe('Тестирование reduceRest', () => {
+describe('Тестирование reducePending', () => {
   describe('RESET', () => {
     test.each([
       ['now < rangeStart', convertHoursToTimestamp(8)],
@@ -38,12 +35,13 @@ describe('Тестирование reduceRest', () => {
         state: machineState.SETUP,
       };
 
-      expect(reduceRest(restSnapshot, resetEvent, nowMs)).toEqual(setupSnapshot);
+      expect(reducePending(pendingSnapshot, resetEvent, nowMs)).toEqual(setupSnapshot);
     });
   });
 
   describe('WORK_START', () => {
     test.each([
+      ['now < rangeStart', convertHoursToTimestamp(8)],
       ['now = rangeEnd', rangeEnd],
       ['now > rangeEnd', convertHoursToTimestamp(19)],
     ])('%s → снимок без изменений', (_label, nowMs) => {
@@ -51,37 +49,38 @@ describe('Тестирование reduceRest', () => {
         type: eventType.WORK_START,
       };
 
-      expect(reduceRest(restSnapshot, workStartEvent, nowMs)).toEqual(restSnapshot);
+      expect(reducePending(pendingSnapshot, workStartEvent, nowMs)).toEqual(pendingSnapshot);
     });
 
-    test('now < rangeEnd → WORK (workSegmentCount переносится без инкремента)', () => {
-      const nowMs = convertHoursToTimestamp(15);
-
+    test.each([
+      ['now = rangeStart', rangeStart],
+      ['rangeStart < now < rangeEnd', convertHoursToTimestamp(10)],
+    ])('%s → WORK', (_label, nowMs) => {
       const workStartEvent: TWorkStartEvent = {
         type: eventType.WORK_START,
       };
 
       const workSnapshot: TWorkSnapshot = {
-        state: machineState.WORK,
         rangeStart,
         rangeEnd,
+        state: machineState.WORK,
         segmentStart: nowMs,
-        workSegmentCount: 2,
+        workSegmentCount: 0,
       };
 
-      expect(reduceRest(restSnapshot, workStartEvent, nowMs)).toEqual(workSnapshot);
+      expect(reducePending(pendingSnapshot, workStartEvent, nowMs)).toEqual(workSnapshot);
     });
   });
 
   describe('RANGE_FINISH', () => {
     test('now < rangeEnd → снимок без изменений', () => {
-      const nowMs = convertHoursToTimestamp(15);
+      const nowMs = convertHoursToTimestamp(10);
 
       const rangeFinishEvent: TRangeFinishEvent = {
         type: eventType.RANGE_FINISH,
       };
 
-      expect(reduceRest(restSnapshot, rangeFinishEvent, nowMs)).toEqual(restSnapshot);
+      expect(reducePending(pendingSnapshot, rangeFinishEvent, nowMs)).toEqual(pendingSnapshot);
     });
 
     test.each([
@@ -93,12 +92,12 @@ describe('Тестирование reduceRest', () => {
       };
 
       const finishedSnapshot: TFinishedSnapshot = {
-        state: machineState.FINISHED,
         rangeStart,
         rangeEnd,
+        state: machineState.FINISHED,
       };
 
-      expect(reduceRest(restSnapshot, rangeFinishEvent, nowMs)).toEqual(finishedSnapshot);
+      expect(reducePending(pendingSnapshot, rangeFinishEvent, nowMs)).toEqual(finishedSnapshot);
     });
   });
 
@@ -116,7 +115,7 @@ describe('Тестирование reduceRest', () => {
         'REST_START → снимок без изменений',
         {
           type: eventType.REST_START,
-          restKind: restKind.SHORT,
+          restKind: restKind.LONG,
         },
       ],
       [
@@ -128,7 +127,7 @@ describe('Тестирование reduceRest', () => {
     ])('%s', (_label: string, event: TEvent) => {
       const nowMs = convertHoursToTimestamp(15);
 
-      expect(reduceRest(restSnapshot, event, nowMs)).toEqual(restSnapshot);
+      expect(reducePending(pendingSnapshot, event, nowMs)).toEqual(pendingSnapshot);
     });
   });
 });

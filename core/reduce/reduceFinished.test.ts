@@ -4,8 +4,8 @@ import { machineState } from '../constants/machine.const';
 import { eventType } from '../constants/events.const';
 import type { TFinishedSnapshot, TSetupSnapshot } from '../types/snapshot.type';
 import type { TEvent, TFinishConfirmEvent } from '../types/events.type';
-import { convertHoursToTimestamp } from '../testUtils/convertHoursToTimestamp';
-import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../testUtils/fixtures';
+import { convertHoursToTimestamp } from '../../testUtils/convertHoursToTimestamp';
+import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../../testUtils/fixtures';
 import { restKind } from '../constants/segment.const';
 
 const finishedSnapshot: TFinishedSnapshot = {
