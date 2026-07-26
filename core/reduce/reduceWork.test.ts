@@ -8,10 +8,10 @@ import type {
 import { machineState } from '../constants/machine.const';
 import type { TEvent, TRangeFinishEvent, TResetEvent, TRestStartEvent } from '../types/events.type';
 import { eventType } from '../constants/events.const';
-import { convertHoursToTimestamp } from '../testUtils/convertHoursToTimestamp';
+import { convertHoursToTimestamp } from '../../testUtils/convertHoursToTimestamp';
 import { reduceWork } from './reduceWork';
 import { restKind } from '../constants/segment.const';
-import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../testUtils/fixtures';
+import { rangeStart, rangeEnd, startMinutes, endMinutes } from '../../testUtils/fixtures';
 
 describe('Тестирование reduceWork', () => {
   describe('RESET', () => {
