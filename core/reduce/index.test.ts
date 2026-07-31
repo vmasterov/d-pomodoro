@@ -12,6 +12,7 @@ import { endMinutes, rangeEnd, rangeStart, startMinutes } from '@testUtils/fixtu
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { reduce } from '@core/reduce/index';
 import { restKind } from '@core/constants/segment.const';
+import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 vi.mock('./reduceSetup.ts', { spy: true });
 vi.mock('./reducePending.ts', { spy: true });
@@ -22,6 +23,8 @@ vi.mock('./reduceFinished.ts', { spy: true });
 beforeEach(() => {
   vi.clearAllMocks();
 });
+
+silenceConsoleWarn();
 
 const handlers = [reduceSetup, reducePending, reduceWork, reduceRest, reduceFinished];
 

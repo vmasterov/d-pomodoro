@@ -17,6 +17,7 @@ import type {
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
 import { restKind } from '@core/constants/segment.const';
+import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 const restSnapshot: TRestSnapshot = {
   state: machineState.REST,
@@ -26,6 +27,8 @@ const restSnapshot: TRestSnapshot = {
   segmentStart: convertHoursToTimestamp(14),
   workSegmentCount: 2,
 };
+
+silenceConsoleWarn();
 
 describe('Тестирование reduceRest', () => {
   describe('RESET', () => {
