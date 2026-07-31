@@ -7,12 +7,15 @@ import type { TEvent, TFinishConfirmEvent } from '@core/types/events.type';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
 import { restKind } from '@core/constants/segment.const';
+import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 const finishedSnapshot: TFinishedSnapshot = {
   state: machineState.FINISHED,
   rangeStart,
   rangeEnd,
 };
+
+silenceConsoleWarn();
 
 describe('Тестирование reduceFinished', () => {
   describe('FINISH_CONFIRM', () => {

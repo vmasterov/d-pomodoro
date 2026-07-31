@@ -17,12 +17,15 @@ import type {
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
 import { restKind } from '@core/constants/segment.const';
+import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 const pendingSnapshot: TPendingSnapshot = {
   rangeStart,
   rangeEnd,
   state: machineState.PENDING,
 };
+
+silenceConsoleWarn();
 
 describe('Тестирование reducePending', () => {
   describe('RESET', () => {

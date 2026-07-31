@@ -17,12 +17,15 @@ import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { reduceWork } from './reduceWork';
 import { restKind } from '@core/constants/segment.const';
 import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
+import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
+
+silenceConsoleWarn();
 
 describe('Тестирование reduceWork', () => {
   describe('RESET', () => {
     test.each([
       ['now < rangeEnd', convertHoursToTimestamp(8)],
-      ["now >= rangeStart && 'now < rangeEnd", convertHoursToTimestamp(10)],
+      ['now >= rangeStart && now < rangeEnd', convertHoursToTimestamp(10)],
       ['now >= rangeEnd', convertHoursToTimestamp(19)],
     ])('→ SETUP (%s)', (_label, nowMs) => {
       const workSnapshot: TWorkSnapshot = {

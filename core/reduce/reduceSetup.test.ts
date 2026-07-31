@@ -14,6 +14,7 @@ import {
   endMinutes,
 } from '@testUtils/fixtures';
 import { restKind } from '@core/constants/segment.const';
+import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 const setupSnapshot: TSetupSnapshot = {
   state: machineState.SETUP,
@@ -24,6 +25,8 @@ const setupStartEvent: TSetupStartEvent = {
   startMinutes,
   endMinutes,
 };
+
+silenceConsoleWarn();
 
 describe('Тестирование reduceSetup', () => {
   describe('SETUP_START', () => {
