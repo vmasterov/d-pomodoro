@@ -1,16 +1,32 @@
 {
   "name": "d-pomodoro",
+  "main": "index.js",
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "build": "echo 'Nothing to build yet...'",
-    "lint": "eslint .",
-    "test": "vitest",
-    "test:run": "vitest run --passWithNoTests",
-    "format": "prettier --write .",
-    "prepare": "git config core.hooksPath .git-hooks || echo 'Not in a git repo'"
+  "dependencies": {
+    "@expo/ui": "~57.0.8",
+    "expo": "~57.0.9",
+    "expo-constants": "~57.0.8",
+    "expo-device": "~57.0.1",
+    "expo-font": "~57.0.1",
+    "expo-glass-effect": "~57.0.1",
+    "expo-image": "~57.0.1",
+    "expo-splash-screen": "~57.0.5",
+    "expo-status-bar": "~57.0.1",
+    "expo-symbols": "~57.0.1",
+    "expo-system-ui": "~57.0.2",
+    "expo-web-browser": "~57.0.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.2",
+    "react-native-gesture-handler": "~2.32.0",
+    "react-native-reanimated": "4.5.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-web": "~0.21.0",
+    "react-native-worklets": "0.10.1"
   },
   "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3",
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.1.1",
     "eslint": "^10.7.0",
@@ -18,14 +34,27 @@
     "globals": "^17.7.0",
     "lint-staged": "^17.1.1",
     "prettier": "^3.9.5",
-    "typescript": "^6.0.3",
     "typescript-eslint": "^8.64.0",
     "vitest": "^4.1.10"
+  },
+  "scripts": {
+    "start": "expo start",
+    "reset-project": "node scripts/reset-project.js",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "eslint .",
+    "test": "vitest",
+    "build": "echo 'Build process placeholder'",
+    "test:run": "vitest run --passWithNoTests",
+    "format": "prettier --write .",
+    "prepare": "git config core.hooksPath .git-hooks || echo 'Not in a git repo'"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
-  }
+  },
+  "private": true
 }
