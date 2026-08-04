@@ -10,16 +10,22 @@
     "ignoreDeprecations": "6.0",
     "strict": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@/assets/*": ["./assets/*"],
-      "@core/*": ["core/*"],
-      "@testUtils/*": ["testUtils/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/assets/*": [
+        "./assets/*"
+      ],
+      "@core/*": [
+        "core/*"
+      ],
+      "@testUtils/*": [
+        "testUtils/*"
+      ]
     }
   },
   "include": [
     "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "**/*.tsx"
   ]
 }
