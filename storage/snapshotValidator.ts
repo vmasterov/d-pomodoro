@@ -1,18 +1,7 @@
 import type { TSnapshot } from '@core/types/snapshot.type';
 import { machineState } from '@core/constants/machine.const';
-import { restKind } from '@core/constants/segment.const';
-import type { TRestKind } from '@core/types/common.type';
-
-const getNumberFieldValue = (value: Record<string, unknown>, name: string): number | null => {
-  return typeof value[name] === 'number' && Number.isFinite(value[name]) ? value[name] : null;
-};
-
-const getRestKind = (value: Record<string, unknown>): TRestKind | null => {
-  return typeof value.restKind === 'string' &&
-    (value.restKind === restKind.LONG || value.restKind === restKind.SHORT)
-    ? value.restKind
-    : null;
-};
+import { getNumberFieldValue } from './utils/getNumberFieldValue';
+import { getRestKind } from './utils/getRestKind';
 
 export function snapshotValidator(value: unknown): TSnapshot | null {
   if (value !== null && typeof value === 'object' && !Array.isArray(value) && 'state' in value) {
