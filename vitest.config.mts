@@ -7,6 +7,7 @@ export default defineConfig({
     alias: {
       '@core': fileURLToPath(new URL('./core', import.meta.url)),
       '@testUtils': fileURLToPath(new URL('./testUtils', import.meta.url)),
+      '@storage': fileURLToPath(new URL('./storage', import.meta.url)),
     },
   },
 });
