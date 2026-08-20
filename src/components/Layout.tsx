@@ -1,6 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, View } from 'react-native';
 import type { PropsWithChildren } from 'react';
+import { theme } from '@/constants/theme.const';
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -13,6 +14,7 @@ export function Layout({ children }: PropsWithChildren) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: theme.color.screenBg,
   },
 
   innerContainer: {

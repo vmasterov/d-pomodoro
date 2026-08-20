@@ -1,68 +1,11 @@
-import type { TextStyle } from 'react-native';
-
-type TColor = {
-  primaryText: string;
-  secondaryText: string;
-  mutedText: string;
-  border: string;
-  accent: string;
-  danger: string;
-  disabled: string;
-  accentSoft: string;
-  screenBg: string;
-};
-
-type TFieldPadding = {
-  vertical: number;
-  horizontal: number;
-};
-
-type TPadding = {
-  field: TFieldPadding;
-  button: number;
-  screen: number;
-};
-
-type TGap = {
-  s: number;
-  m: number;
-  l: number;
-};
-
-type TRadius = {
-  field: number;
-  button: number;
-};
-
-type TSpacing = {
-  padding: TPadding;
-  gap: TGap;
-  radius: TRadius;
-};
-
-type TFont = Pick<TextStyle, 'fontSize' | 'fontWeight' | 'fontFamily'>;
-
-type TTypography = {
-  title: TFont;
-  subtitle: TFont;
-  label: TFont;
-  clock: TFont;
-  fieldValue: TFont;
-  button: TFont;
-  hint: TFont;
-};
-
-export type TTheme = {
-  color: TColor;
-  spacing: TSpacing;
-  typography: TTypography;
-};
+import type { TTheme } from '@/types/theme.type';
 
 export const theme: TTheme = {
   color: {
     primaryText: '#2C2C2A',
     secondaryText: '#5F5E5A',
     mutedText: '#888780',
+    lightText: '#FFFFFF',
     border: '#D3D1C7',
     accent: '#185FA5',
     danger: '#A32D2D',
@@ -121,4 +64,4 @@ export const theme: TTheme = {
       fontWeight: '400',
     },
   },
-};
+} as const;
