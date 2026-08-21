@@ -1,4 +1,4 @@
-import { Pressable, Text, StyleSheet } from 'react-native';
+import { Pressable, Text, StyleSheet, View } from 'react-native';
 import { theme } from '@/constants/theme.const';
 import type { TButtonComponent, TButtonProps, TButtonVariant } from '@/types/button.type';
 import { buttonVariant } from '@/constants/component.const';
@@ -10,30 +10,31 @@ export function Button({
   disabled,
   variant = buttonVariant.DEFAULT,
 }: PropsWithChildren<TButtonProps>) {
-  const buttonStyles = [
-    styles.button,
-    variantStyles[variant].button,
-    disabled && disabledStyle.button,
+  const wrapperStyles = [
+    styles.wrapper,
+    variantStyles[variant].wrapper,
+    disabled && disabledStyle.wrapper,
   ];
 
   const textStyles = [styles.text, variantStyles[variant].text, disabled && disabledStyle.text];
 
   return (
-    <Pressable
-      style={({ pressed }) => [...buttonStyles, { opacity: pressed ? 0.5 : 1 }]}
-      disabled={disabled}
-      onPress={onPress}
-    >
-      <Text style={textStyles}>{children}</Text>
-      <Text style={textStyles}>Перепиши подключение стилей более "красиво"</Text>
-      <Text style={textStyles}>opacity замени другими стилями</Text>
-    </Pressable>
+    <View style={wrapperStyles}>
+      <Pressable
+        style={styles.button}
+        android_ripple={styles.ripple}
+        disabled={disabled}
+        onPress={onPress}
+      >
+        <Text style={textStyles}>{children}</Text>
+      </Pressable>
+    </View>
   );
 }
 
 const variantStyles = {
   [buttonVariant.ACCENT]: {
-    button: {
+    wrapper: {
       backgroundColor: theme.color.accent,
       borderColor: theme.color.accent,
     },
@@ -42,7 +43,7 @@ const variantStyles = {
     },
   },
   [buttonVariant.DEFAULT]: {
-    button: {
+    wrapper: {
       backgroundColor: 'transparent',
       borderColor: theme.color.border,
     },
@@ -51,7 +52,7 @@ const variantStyles = {
     },
   },
   [buttonVariant.DANGER]: {
-    button: {
+    wrapper: {
       backgroundColor: 'transparent',
       borderColor: theme.color.danger,
     },
@@ -62,7 +63,7 @@ const variantStyles = {
 } satisfies Record<TButtonVariant, TButtonComponent>;
 
 const disabledStyle = {
-  button: {
+  wrapper: {
     backgroundColor: theme.color.disabled,
     borderColor: theme.color.disabled,
   },
@@ -72,13 +73,19 @@ const disabledStyle = {
 } satisfies TButtonComponent;
 
 const styles = StyleSheet.create({
-  button: {
+  wrapper: {
+    overflow: 'hidden',
     borderRadius: theme.spacing.radius.button,
-    padding: theme.spacing.padding.button,
     borderWidth: 1,
+  },
+  button: {
+    padding: theme.spacing.padding.button,
   },
   text: {
     ...theme.typography.button,
     textAlign: 'center',
+  },
+  ripple: {
+    color: 'rgba(0, 0, 0, 0.2)',
   },
 });
