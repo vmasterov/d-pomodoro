@@ -12,13 +12,13 @@ export function Setup({ setupStart }: TSetupProps) {
     <Layout>
       <View style={{ gap: theme.spacing.gap.l }}>
         <Text>Setup Screen</Text>
-        <Button variant={buttonVariant.ACCENT} onPress={() => alert(buttonVariant.ACCENT)}>
+        <Button variant={buttonVariant.ACCENT} onPress={() => {}}>
           {buttonVariant.ACCENT.toLocaleUpperCase()}
         </Button>
-        <Button variant={buttonVariant.DEFAULT} onPress={() => alert(buttonVariant.DEFAULT)}>
+        <Button variant={buttonVariant.DEFAULT} onPress={() => {}}>
           {buttonVariant.DEFAULT.toLocaleUpperCase()}
         </Button>
-        <Button variant={buttonVariant.DANGER} onPress={() => alert(buttonVariant.DANGER)}>
+        <Button variant={buttonVariant.DANGER} onPress={() => {}}>
           {buttonVariant.DANGER.toLocaleUpperCase()}
         </Button>
         <Button disabled onPress={() => alert('disabled')}>

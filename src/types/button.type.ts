@@ -10,6 +10,6 @@ export type TButtonProps = {
 };
 
 export type TButtonComponent = {
-  button: ViewStyle;
+  wrapper: ViewStyle;
   text: TextStyle;
 };
