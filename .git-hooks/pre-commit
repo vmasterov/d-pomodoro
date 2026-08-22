@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-GREEN=$(printf '\033[0;32m')
-YELLOW=$(printf '\033[0;33m')
-RED=$(printf '\033[0;31m')
-WHITE=$(printf '\033[1;37m')
-NC=$(printf '\033[0m')
+readonly RED=$'\033[31m'
+readonly GREEN=$'\033[32m'
+readonly YELLOW=$'\033[33m'
+readonly NC=$'\033[0m'
 
 # Пропустить проверку ветки при первом коммите (HEAD ещё не существует)
 if ! git rev-parse HEAD > /dev/null 2>&1; then
@@ -30,7 +29,7 @@ else
   echo "${RED}❌ Неверное имя ветки${NC}"
   echo ""
   echo "Допустимые форматы:"
-  echo "  ${WHITE}<type>/<description>${NC}"
+  echo "  <type>/<description>"
   echo ""
   echo "Допустимые типы:"
   echo "  ${GREEN}feature${NC}   - новая функциональность"
@@ -45,12 +44,12 @@ else
   echo "  ${GREEN}ci${NC}        - изменения в CI/CD"
   echo ""
   echo "Примеры:"
-  echo "  ${WHITE}feature/add-auth-page${NC}"
-  echo "  ${WHITE}bugfix/fix-login-error${NC}"
-  echo "  ${WHITE}chore/update-dependencies${NC}"
+  echo "  feature/add-auth-page}"
+  echo "  bugfix/fix-login-error}"
+  echo "  chore/update-dependencies}"
   echo ""
   echo "Ваша ветка:"
-  echo "  ${WHITE}$branch${NC}"
+  echo "  $branch"
   echo ""
   exit 1
 fi

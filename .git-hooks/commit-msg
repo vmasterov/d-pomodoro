@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 
 # Определение цветов
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-WHITE='\033[1;37m'
-NC='\033[0m' # No Color
+readonly RED=$'\033[31m'
+readonly GREEN=$'\033[32m'
+readonly YELLOW=$'\033[33m'
+readonly NC=$'\033[0m'
 
 message="$(cat "$1")"
 required_pattern="^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|revert)(\(.+\))?: .+"
 
 if ! echo "$message" | grep -qE "$required_pattern"; then
   echo "❌ Неверный формат сообщения коммита. Сообщение коммита должно соответствовать Conventional Commits:"
-  echo "${WHITE}<type>[optional scope]: <description>${NC}"
+  echo "<type>[optional scope]: <description>"
   echo ""
   echo "Допустимые типы:"
   echo "  ${GREEN}feat${NC}     - новая функциональность"
@@ -28,13 +27,13 @@ if ! echo "$message" | grep -qE "$required_pattern"; then
   echo "  ${GREEN}revert${NC}   - откат предыдущих изменений"
   echo ""
   echo "Примеры:"
-  echo "  ${WHITE}feat: добавлена новая страница авторизации${NC}"
-  echo "  ${WHITE}fix(auth): исправлена ошибка валидации пароля${NC}"
-  echo "  ${WHITE}docs: обновлена документация API${NC}"
-  echo "  ${WHITE}refactor(components): переписан компонент Button${NC}"
+  echo "  feat: добавлена новая страница авторизации"
+  echo "  fix(auth): исправлена ошибка валидации пароля"
+  echo "  docs: обновлена документация API"
+  echo "  refactor(components): переписан компонент Button"
   echo ""
   echo "Ваше сообщение коммита:"
-  echo "${WHITE}$message${NC}"
+  echo "  $message"
   echo ""
   echo "Для получения дополнительной информации проверьте скрипт в .husky/commit-msg"
   exit 1
