@@ -1,7 +1,7 @@
 import type { TSetupSnapshot, TSnapshot } from '@core/types/snapshot.type';
 import type { TEvent } from '@core/types/events.type';
 import { eventType } from '@core/constants/events.const';
-import { convertMinutesToTimestamp } from '@core/utils/date.util';
+import { getTimeFromTimestamp } from '@core/utils/date.util';
 import { machineState } from '@core/constants/machine.const';
 import { reduceDefault } from '@core/utils/reduce/reduceDefault.util';
 
@@ -10,17 +10,17 @@ export function reduceSetup(snapshot: TSetupSnapshot, event: TEvent, nowMs: numb
     return reduceDefault(snapshot, event.type);
   }
 
-  const { startMinutes, endMinutes } = event;
-  let rangeStart = convertMinutesToTimestamp(nowMs, startMinutes);
-  let rangeEnd = convertMinutesToTimestamp(nowMs, endMinutes);
+  const { startTimestamp, endTimestamp } = event;
+  let rangeStart = getTimeFromTimestamp(nowMs, startTimestamp);
+  let rangeEnd = getTimeFromTimestamp(nowMs, endTimestamp);
   const isTomorrow = nowMs >= rangeEnd;
   const isBeforeStart = nowMs < rangeStart;
   const isPending = isTomorrow || isBeforeStart;
 
   if (isPending) {
     if (isTomorrow) {
-      rangeStart = convertMinutesToTimestamp(nowMs, startMinutes, 1);
-      rangeEnd = convertMinutesToTimestamp(nowMs, endMinutes, 1);
+      rangeStart = getTimeFromTimestamp(nowMs, startTimestamp, 1);
+      rangeEnd = getTimeFromTimestamp(nowMs, endTimestamp, 1);
     }
 
     return {

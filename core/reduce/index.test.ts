@@ -1,14 +1,14 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { reduceSetup } from './reduceSetup';
-import { reducePending } from './reducePending';
-import { reduceWork } from './reduceWork';
-import { reduceRest } from './reduceRest';
-import { reduceFinished } from './reduceFinished';
+import { reduceSetup } from '@core/reduce/reduceSetup';
+import { reducePending } from '@core/reduce/reducePending';
+import { reduceWork } from '@core/reduce/reduceWork';
+import { reduceRest } from '@core/reduce/reduceRest';
+import { reduceFinished } from '@core/reduce/reduceFinished';
 import type { TSnapshot } from '@core/types/snapshot.type';
 import { machineState } from '@core/constants/machine.const';
 import type { TEvent } from '@core/types/events.type';
 import { eventType } from '@core/constants/events.const';
-import { endMinutes, rangeEnd, rangeStart, startMinutes } from '@testUtils/fixtures';
+import { endTimestamp, rangeEnd, rangeStart, startTimestamp } from '@testUtils/fixtures';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { reduce } from '@core/reduce/index';
 import { restKind } from '@core/constants/segment.const';
@@ -80,8 +80,8 @@ const finishedSnapshot = {
 
 const setupEvent = {
   type: eventType.SETUP_START,
-  startMinutes,
-  endMinutes,
+  startTimestamp,
+  endTimestamp,
 };
 
 describe('Тестирование функции reduce', () => {

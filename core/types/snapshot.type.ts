@@ -1,5 +1,5 @@
-import { machineState } from '../constants/machine.const';
-import type { TRestKind } from './common.type';
+import { machineState } from '@core/constants/machine.const';
+import type { TRestKind } from '@core/types/common.type';
 
 export type TSetupSnapshot = {
   state: typeof machineState.SETUP;

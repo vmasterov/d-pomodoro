@@ -1,15 +1,15 @@
 import { describe, test, expect } from 'vitest';
 import { settingsValidator } from './settingsValidator';
-import { startMinutes, endMinutes } from '@testUtils/fixtures';
+import { startTimestamp, endTimestamp } from '@testUtils/fixtures';
 
 describe('Тестирование settingsValidator', () => {
   describe('НЕ ОБЪЕКТ', () => {
     test.each([
       ['null', null],
       ['undefined', undefined],
-      ['число', 540],
+      ['число', startTimestamp],
       ['строка', 'settings'],
-      ['массив', [{ startMinutes, endMinutes }]],
+      ['массив', [{ startTimestamp, endTimestamp }]],
     ])('%s → null', (_label, value) => {
       expect(settingsValidator(value)).toBeNull();
     });
@@ -17,37 +17,37 @@ describe('Тестирование settingsValidator', () => {
 
   describe('ВАЛИДНЫЕ НАСТРОЙКИ', () => {
     test('оба поля числа → настройки', () => {
-      expect(settingsValidator({ startMinutes, endMinutes })).toEqual({
-        startMinutes,
-        endMinutes,
+      expect(settingsValidator({ startTimestamp, endTimestamp })).toEqual({
+        startTimestamp,
+        endTimestamp,
       });
     });
 
     test('полночь (0) проходит', () => {
-      expect(settingsValidator({ startMinutes: 0, endMinutes })).toEqual({
-        startMinutes: 0,
-        endMinutes,
+      expect(settingsValidator({ startTimestamp: 0, endTimestamp })).toEqual({
+        startTimestamp: 0,
+        endTimestamp,
       });
     });
 
     test('лишние поля отбрасываются', () => {
-      expect(settingsValidator({ startMinutes, endMinutes, legacyField: 'x' })).toEqual({
-        startMinutes,
-        endMinutes,
+      expect(settingsValidator({ startTimestamp, endTimestamp, legacyField: 'x' })).toEqual({
+        startTimestamp,
+        endTimestamp,
       });
     });
   });
 
   describe('НЕВАЛИДНЫЕ НАСТРОЙКИ', () => {
     test.each([
-      ['startMinutes отсутствует', { endMinutes }],
-      ['endMinutes отсутствует', { startMinutes }],
+      ['startTimestamp отсутствует', { endTimestamp }],
+      ['endTimestamp отсутствует', { startTimestamp }],
       ['оба поля отсутствуют', {}],
-      ['startMinutes строкой', { startMinutes: '540', endMinutes }],
-      ['endMinutes строкой', { startMinutes, endMinutes: '1080' }],
-      ['startMinutes NaN', { startMinutes: NaN, endMinutes }],
-      ['endMinutes Infinity', { startMinutes, endMinutes: Infinity }],
-      ['null вместо числа', { startMinutes: null, endMinutes }],
+      ['startTimestamp строкой', { startTimestamp: String(startTimestamp), endTimestamp }],
+      ['endTimestamp строкой', { startTimestamp, endTimestamp: String(endTimestamp) }],
+      ['startTimestamp NaN', { startTimestamp: NaN, endTimestamp }],
+      ['endTimestamp Infinity', { startTimestamp, endTimestamp: Infinity }],
+      ['null вместо числа', { startTimestamp: null, endTimestamp }],
     ])('%s → null', (_label, value) => {
       expect(settingsValidator(value)).toBeNull();
     });

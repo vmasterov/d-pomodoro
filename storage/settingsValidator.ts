@@ -6,19 +6,19 @@ export function settingsValidator(value: unknown): TSettings | null {
     value !== null &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
-    'startMinutes' in value &&
-    'endMinutes' in value
+    'startTimestamp' in value &&
+    'endTimestamp' in value
   ) {
-    const startMinutes = getNumberFieldValue(value, 'startMinutes');
-    const endMinutes = getNumberFieldValue(value, 'endMinutes');
+    const startTimestamp = getNumberFieldValue(value, 'startTimestamp');
+    const endTimestamp = getNumberFieldValue(value, 'endTimestamp');
 
-    if (startMinutes === null || endMinutes === null) {
+    if (startTimestamp === null || endTimestamp === null) {
       return null;
     }
 
     return {
-      startMinutes,
-      endMinutes,
+      startTimestamp,
+      endTimestamp,
     };
   }
 

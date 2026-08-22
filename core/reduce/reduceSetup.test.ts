@@ -1,5 +1,5 @@
 import { test, describe, expect } from 'vitest';
-import { reduceSetup } from './reduceSetup';
+import { reduceSetup } from '@core/reduce/reduceSetup';
 import { machineState } from '@core/constants/machine.const';
 import { eventType } from '@core/constants/events.const';
 import type { TPendingSnapshot, TSetupSnapshot, TWorkSnapshot } from '@core/types/snapshot.type';
@@ -10,8 +10,8 @@ import {
   rangeEnd,
   rangeStartTomorrow,
   rangeEndTomorrow,
-  startMinutes,
-  endMinutes,
+  startTimestamp,
+  endTimestamp,
 } from '@testUtils/fixtures';
 import { restKind } from '@core/constants/segment.const';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
@@ -22,8 +22,8 @@ const setupSnapshot: TSetupSnapshot = {
 
 const setupStartEvent: TSetupStartEvent = {
   type: eventType.SETUP_START,
-  startMinutes,
-  endMinutes,
+  startTimestamp,
+  endTimestamp,
 };
 
 silenceConsoleWarn();
