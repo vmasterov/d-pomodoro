@@ -1,11 +1,11 @@
 import { test, describe, expect } from 'vitest';
-import { reduceFinished } from './reduceFinished';
+import { reduceFinished } from '@core/reduce/reduceFinished';
 import { machineState } from '@core/constants/machine.const';
 import { eventType } from '@core/constants/events.const';
 import type { TFinishedSnapshot, TSetupSnapshot } from '@core/types/snapshot.type';
 import type { TEvent, TFinishConfirmEvent } from '@core/types/events.type';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
-import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
+import { rangeStart, rangeEnd, startTimestamp, endTimestamp } from '@testUtils/fixtures';
 import { restKind } from '@core/constants/segment.const';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
@@ -43,8 +43,8 @@ describe('Тестирование reduceFinished', () => {
         'SETUP_START → снимок без изменений',
         {
           type: eventType.SETUP_START,
-          startMinutes,
-          endMinutes,
+          startTimestamp,
+          endTimestamp,
         },
       ],
       [

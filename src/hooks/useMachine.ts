@@ -29,11 +29,11 @@ export function useMachine(): TUseMachineReturn {
     commit(newSnapshot);
   };
 
-  const setupStart = (startMinutes: number, endMinutes: number) => {
+  const setupStart = (startTimestamp: number, endTimestamp: number) => {
     dispatcher({
       type: eventType.SETUP_START,
-      startMinutes,
-      endMinutes,
+      startTimestamp,
+      endTimestamp,
     });
   };
   const reset = () => {

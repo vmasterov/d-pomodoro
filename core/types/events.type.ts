@@ -1,10 +1,10 @@
-import type { TRestKind } from './common.type';
-import { eventType } from '../constants/events.const';
+import type { TRestKind } from '@core/types/common.type';
+import { eventType } from '@core/constants/events.const';
 
 export type TSetupStartEvent = {
   type: typeof eventType.SETUP_START;
-  startMinutes: number;
-  endMinutes: number;
+  startTimestamp: number;
+  endTimestamp: number;
 };
 
 export type TResetEvent = {

@@ -1,5 +1,5 @@
 import { test, describe, expect } from 'vitest';
-import { reduceRest } from './reduceRest';
+import { reduceRest } from '@core/reduce/reduceRest';
 import { machineState } from '@core/constants/machine.const';
 import { eventType } from '@core/constants/events.const';
 import type {
@@ -15,7 +15,7 @@ import type {
   TWorkStartEvent,
 } from '@core/types/events.type';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
-import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
+import { rangeStart, rangeEnd, startTimestamp, endTimestamp } from '@testUtils/fixtures';
 import { restKind } from '@core/constants/segment.const';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
@@ -116,8 +116,8 @@ describe('Тестирование reduceRest', () => {
         'SETUP_START → снимок без изменений',
         {
           type: eventType.SETUP_START,
-          startMinutes,
-          endMinutes,
+          startTimestamp,
+          endTimestamp,
         },
       ],
       [

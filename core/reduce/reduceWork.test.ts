@@ -14,9 +14,9 @@ import type {
 } from '@core/types/events.type';
 import { eventType } from '@core/constants/events.const';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
-import { reduceWork } from './reduceWork';
+import { reduceWork } from '@core/reduce/reduceWork';
 import { restKind } from '@core/constants/segment.const';
-import { rangeStart, rangeEnd, startMinutes, endMinutes } from '@testUtils/fixtures';
+import { rangeStart, rangeEnd, startTimestamp, endTimestamp } from '@testUtils/fixtures';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 silenceConsoleWarn();
@@ -149,8 +149,8 @@ describe('Тестирование reduceWork', () => {
         'SETUP_START → снимок без изменений',
         {
           type: eventType.SETUP_START,
-          startMinutes,
-          endMinutes,
+          startTimestamp,
+          endTimestamp,
         },
       ],
       [

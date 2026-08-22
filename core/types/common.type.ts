@@ -1,8 +1,8 @@
-import { restKind } from '../constants/segment.const';
+import { restKind } from '@core/constants/segment.const';
 
 export type TRestKind = (typeof restKind)[keyof typeof restKind];
 
 export type TSettings = {
-  startMinutes: number;
-  endMinutes: number;
+  startTimestamp: number;
+  endTimestamp: number;
 };
