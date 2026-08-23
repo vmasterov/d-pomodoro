@@ -41,7 +41,7 @@ type TSpacing = {
   radius: TRadius;
 };
 
-type TFont = Pick<TextStyle, 'fontSize' | 'fontWeight' | 'fontFamily'>;
+type TFont = TextStyle;
 
 type TTypography = {
   title: TFont;

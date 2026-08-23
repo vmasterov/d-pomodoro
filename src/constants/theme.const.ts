@@ -34,15 +34,16 @@ export const theme: TTheme = {
   },
   typography: {
     title: {
-      fontSize: 24,
-      fontWeight: '500',
+      fontSize: 38,
+      fontWeight: '800',
     },
     subtitle: {
-      fontSize: 14,
+      fontSize: 18,
       fontWeight: '400',
+      lineHeight: 22,
     },
     label: {
-      fontSize: 12,
+      fontSize: 16,
       fontWeight: '400',
     },
     clock: {
@@ -51,8 +52,8 @@ export const theme: TTheme = {
       fontFamily: 'monospace',
     },
     fieldValue: {
-      fontSize: 30,
-      fontWeight: '500',
+      fontSize: 48,
+      fontWeight: '700',
       fontFamily: 'monospace',
     },
     button: {
