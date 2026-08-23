@@ -1,4 +1,4 @@
-import type { TWorkSnapshot, TRestSnapshot } from '@core/types/snapshot.type';
+import type { TWorkSnapshot, TRestSnapshot, TSnapshot } from '@core/types/snapshot.type';
 import { MS_PER_MINUTE } from '@core/constants/common.const';
 import { machineState } from '@core/constants/machine.const';
 import { workDuration, restDuration, restKind } from '@core/constants/segment.const';
@@ -16,4 +16,16 @@ export function isRangeOver(rangeEnd: number, nowMs: number): boolean {
 
 export function recommendedRest(workSegmentCount: number): TRestKind {
   return workSegmentCount % 2 === 0 ? restKind.SHORT : restKind.LONG;
+}
+
+export function getActiveRangeEnd(snapshot: TSnapshot | null) {
+  if (
+    !snapshot ||
+    snapshot.state === machineState.FINISHED ||
+    snapshot.state === machineState.SETUP
+  ) {
+    return null;
+  }
+
+  return snapshot.rangeEnd;
 }

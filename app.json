@@ -19,6 +19,9 @@
     },
     "experiments": {
       "reactCompiler": true
-    }
+    },
+    "plugins": [
+      "@react-native-community/datetimepicker"
+    ]
   }
 }

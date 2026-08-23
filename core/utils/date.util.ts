@@ -10,3 +10,10 @@ export function getTimeFromTimestamp(nowMs: number, timestamp: number, dayOffset
     dateFromTimestamp.getMinutes(),
   ).getTime();
 }
+
+export function convertTimestampToFormatedString(date: Date): string {
+  const formatHours = String(date.getHours()).padStart(2, '0');
+  const formatMinutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${formatHours}:${formatMinutes}`;
+}

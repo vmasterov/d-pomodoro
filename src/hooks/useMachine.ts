@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { TSnapshot } from '@core/types/snapshot.type';
 import { loadSnapshot, saveSnapshot } from '@storage/index';
-import { isRangeOver } from '@core/selectors/selectors';
+import { getActiveRangeEnd, isRangeOver } from '@core/selectors/selectors';
 import { reduce } from '@core/reduce';
 import { eventType } from '@core/constants/events.const';
 import { machineState } from '@core/constants/machine.const';
@@ -61,19 +61,6 @@ export function useMachine(): TUseMachineReturn {
     dispatcher({
       type: eventType.FINISH_CONFIRM,
     });
-  };
-
-  // TODO: вынести в core/selectors, потому что это утверждение о домене
-  const getActiveRangeEnd = (snapshot: TSnapshot | null) => {
-    if (
-      !snapshot ||
-      snapshot.state === machineState.FINISHED ||
-      snapshot.state === machineState.SETUP
-    ) {
-      return null;
-    }
-
-    return snapshot.rangeEnd;
   };
 
   const startTimer = (rangeEnd: number) =>
