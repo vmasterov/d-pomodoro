@@ -1,5 +1,3 @@
-import type { TTimepickerError } from '@/types/timepicker.type';
-
 export const buttonVariant = {
   ACCENT: 'accent',
   DEFAULT: 'default',
@@ -12,8 +10,3 @@ export const buttonMod = {
 } as const;
 
 export const TIMEPICKER_PLACEHOLDER = '--:--';
-
-export const INIT_TIMEPICKER_ERRORS: TTimepickerError = {
-  startDateErrorText: null,
-  endDateErrorText: null,
-};

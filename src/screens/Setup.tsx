@@ -2,46 +2,33 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Layout } from '@/components/Layout';
 import type { TSetupProps } from '@/types/setup.type';
 import { theme } from '@/constants/theme.const';
-import { Timepicker } from '@/components/Timepicker';
+import { TimeRange } from '@/components/TimeRange';
 import { Button } from '@/components/Button';
-import { buttonVariant, INIT_TIMEPICKER_ERRORS } from '@/constants/component.const';
-import { useEffect, useMemo, useState } from 'react';
+import { buttonVariant } from '@/constants/component.const';
+import { useEffect, useState } from 'react';
 import { loadSettings } from '@storage/index';
-import type { TTimepicker, TTimepickerError } from '@/types/timepicker.type';
+import type { TTimeRange } from '@/types/timeRange.type';
 
 export function Setup({ setupStart }: TSetupProps) {
   const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
   const [endTimestamp, setEndTimestamp] = useState<number | null>(null);
-  const [errors, setErrors] = useState<TTimepickerError>(INIT_TIMEPICKER_ERRORS);
 
   console.log(setupStart);
 
-  const startDateMemo = useMemo(
-    () => (startTimestamp ? new Date(startTimestamp) : null),
-    [startTimestamp],
-  );
-  const endDateMemo = useMemo(() => (endTimestamp ? new Date(endTimestamp) : null), [endTimestamp]);
+  const startDate = startTimestamp !== null ? new Date(startTimestamp) : null; // Здесь и далее не использую useMemo из-за React Compiler
+  const endDate = endTimestamp !== null ? new Date(endTimestamp) : null;
 
-  const isErrors = useMemo(() => Object.values(errors).some((error) => error), [errors]);
+  const endError =
+    startTimestamp !== null && endTimestamp !== null && startTimestamp >= endTimestamp
+      ? 'Конец раньше начала'
+      : '';
 
-  const isDisabled = useMemo(
-    () => !(startTimestamp && endTimestamp && !isErrors),
-    [startTimestamp, endTimestamp, isErrors],
-  );
+  const isDisabled = !(startTimestamp !== null && endTimestamp !== null && !endError);
 
-  const validateTimepicker = () => {
-    setErrors(INIT_TIMEPICKER_ERRORS);
-
-    if (startTimestamp && endTimestamp && startTimestamp > endTimestamp) {
-      alert('Конец раньше начала');
-      setErrors({ ...errors, endDateErrorText: 'Конец раньше начала' });
-    }
-  };
-
-  const updateRangeFieldHandler: TTimepicker['updateRangeField'] = (field, isStart = true) => {
+  const updateRangeFieldHandler: TTimeRange['updateRangeField'] = (field, type = 'start') => {
     const timestamp = field.getTime();
 
-    if (isStart) {
+    if (type === 'start') {
       setStartTimestamp(timestamp);
     } else {
       setEndTimestamp(timestamp);
@@ -63,10 +50,6 @@ export function Setup({ setupStart }: TSetupProps) {
     void initTimeStates();
   }, []);
 
-  useEffect(() => {
-    validateTimepicker();
-  }, [startTimestamp, endTimestamp]);
-
   return (
     <Layout>
       <View>
@@ -74,17 +57,13 @@ export function Setup({ setupStart }: TSetupProps) {
         <Text style={styles.subtitle}>Когда сегодня начинается и&nbsp;заканчивается работа</Text>
 
         <View style={styles.block}>
-          <Timepicker
-            startDate={startDateMemo}
-            endDate={endDateMemo}
+          <TimeRange
+            startDate={startDate}
+            endDate={endDate}
             updateRangeField={updateRangeFieldHandler}
-            errors={errors}
+            errors={{ endDateErrorText: endError }}
           />
-          <Button
-            onPress={() => onPressHandler()}
-            variant={buttonVariant.ACCENT}
-            disabled={isDisabled}
-          >
+          <Button onPress={onPressHandler} variant={buttonVariant.ACCENT} disabled={isDisabled}>
             Старт
           </Button>
         </View>

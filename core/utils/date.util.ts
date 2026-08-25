@@ -11,7 +11,7 @@ export function getTimeFromTimestamp(nowMs: number, timestamp: number, dayOffset
   ).getTime();
 }
 
-export function convertTimestampToFormatedString(date: Date): string {
+export function convertTimestampToFormattedString(date: Date): string {
   const formatHours = String(date.getHours()).padStart(2, '0');
   const formatMinutes = String(date.getMinutes()).padStart(2, '0');
 
