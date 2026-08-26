@@ -10,7 +10,7 @@ import { Work } from '@/screens/Work';
 import { Finished } from '@/screens/Finished';
 
 export default function App() {
-  const { setupStart, snapshot } = useMachine();
+  const { snapshot, setupStart, finishConfirm } = useMachine();
 
   const showScreen = (snapshot: TSnapshot | null) => {
     if (!snapshot) {
@@ -31,7 +31,7 @@ export default function App() {
         return <Rest setupStart={setupStart} />;
       }
       case machineState.FINISHED: {
-        return <Finished setupStart={setupStart} />;
+        return <Finished finishConfirm={finishConfirm} />;
       }
       default: {
         const _exhaustive: never = snapshot;

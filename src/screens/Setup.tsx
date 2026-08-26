@@ -55,9 +55,8 @@ export function Setup({ setupStart }: TSetupProps) {
   }, []);
 
   return (
-    <Layout>
+    <Layout title="Рабочий диапазон">
       <View>
-        <Text style={styles.title}>Рабочий диапазон</Text>
         <Text style={styles.subtitle}>Когда сегодня начинается и&nbsp;заканчивается работа</Text>
 
         <View style={styles.block}>
@@ -77,12 +76,6 @@ export function Setup({ setupStart }: TSetupProps) {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    ...theme.typography.title,
-    color: theme.color.primaryText,
-    marginVertical: theme.spacing.gap.s,
-    textAlign: 'center',
-  },
   subtitle: {
     ...theme.typography.subtitle,
     color: theme.color.mutedText,
