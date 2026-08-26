@@ -47,8 +47,8 @@ export const theme: TTheme = {
       fontWeight: '400',
     },
     clock: {
-      fontSize: 48,
-      fontWeight: '500',
+      fontSize: 80,
+      fontWeight: '700',
       fontFamily: 'monospace',
     },
     fieldValue: {

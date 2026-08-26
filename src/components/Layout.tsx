@@ -4,25 +4,21 @@ import type { PropsWithChildren } from 'react';
 import { theme } from '@/constants/theme.const';
 import type { TLayoutProps } from '@/types/layout.type';
 
-export function Layout({ children, title }: PropsWithChildren<TLayoutProps>) {
+export function Layout({ children, title, subtitle }: PropsWithChildren<TLayoutProps>) {
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>{title}</Text>
-        {children}
+        <View style={styles.block}>
+          <Text style={styles.title}>{title}</Text>
+          {Boolean(subtitle) && <Text style={styles.subtitle}>{subtitle}</Text>}
+          {children}
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    ...theme.typography.title,
-    color: theme.color.primaryText,
-    marginVertical: theme.spacing.gap.s,
-    textAlign: 'center',
-  },
-
   container: {
     flex: 1,
     backgroundColor: theme.color.screenBg,
@@ -31,5 +27,22 @@ const styles = StyleSheet.create({
   innerContainer: {
     paddingHorizontal: 24,
     flex: 1,
+  },
+
+  block: {
+    gap: theme.spacing.gap.l,
+  },
+
+  title: {
+    ...theme.typography.title,
+    color: theme.color.primaryText,
+    marginVertical: theme.spacing.gap.s,
+    textAlign: 'center',
+  },
+
+  subtitle: {
+    ...theme.typography.subtitle,
+    color: theme.color.mutedText,
+    textAlign: 'center',
   },
 });
