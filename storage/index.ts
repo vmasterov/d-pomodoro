@@ -25,7 +25,6 @@ export async function loadSettings(): Promise<TSettings | null> {
   const raw = await getStorageData(SETTINGS_KEY);
 
   return settingsValidator(raw);
-  // await delStorageData(SETTINGS_KEY);
 }
 
 export async function saveSettings(settings: TSettings): Promise<void> {
