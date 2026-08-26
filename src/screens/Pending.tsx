@@ -10,7 +10,7 @@ export function Pending({ setupStart }: TPendingProps) {
   console.log(setupStart);
 
   return (
-    <Layout>
+    <Layout title="Ожидание начала">
       <View>
         <Text>Pending Screen</Text>
       </View>

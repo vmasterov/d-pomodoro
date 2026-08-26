@@ -1,18 +1,13 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { Layout } from '@/components/Layout';
-import type { TUseMachineReturn } from '@/types/useMachineReturn.type';
+import { Button } from '@/components/Button';
+import type { TFinishedProps } from '@/types/finished.type';
 
-type TFinishedProps = {
-  setupStart: TUseMachineReturn['setupStart'];
-};
-
-export function Finished({ setupStart }: TFinishedProps) {
-  console.log(setupStart);
-
+export function Finished({ finishConfirm }: TFinishedProps) {
   return (
-    <Layout>
+    <Layout title="День окончен">
       <View>
-        <Text>Finished Screen</Text>
+        <Button onPress={finishConfirm}>Начать заново</Button>
       </View>
     </Layout>
   );
