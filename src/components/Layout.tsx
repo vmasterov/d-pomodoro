@@ -8,11 +8,9 @@ export function Layout({ children, title, subtitle }: PropsWithChildren<TLayoutP
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.innerContainer}>
-        <View style={styles.block}>
-          <Text style={styles.title}>{title}</Text>
-          {Boolean(subtitle) && <Text style={styles.subtitle}>{subtitle}</Text>}
-          {children}
-        </View>
+        <Text style={styles.title}>{title}</Text>
+        {Boolean(subtitle) && <Text style={styles.subtitle}>{subtitle}</Text>}
+        {children}
       </View>
     </SafeAreaView>
   );
@@ -27,10 +25,9 @@ const styles = StyleSheet.create({
   innerContainer: {
     paddingHorizontal: 24,
     flex: 1,
-  },
-
-  block: {
-    gap: theme.spacing.gap.l,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    // gap: theme.spacing.gap.l,
   },
 
   title: {
