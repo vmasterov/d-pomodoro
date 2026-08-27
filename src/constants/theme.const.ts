@@ -1,4 +1,4 @@
-import type { TTheme } from '@/types/theme.type';
+import type { TTheme } from '@/types/constants/theme.type';
 
 export const theme: TTheme = {
   color: {

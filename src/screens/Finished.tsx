@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/Button';
-import type { TFinishedProps } from '@/types/finished.type';
+import type { TFinishedProps } from '@/types/screens/finished.type';
 
 export function Finished({ finishConfirm }: TFinishedProps) {
   return (

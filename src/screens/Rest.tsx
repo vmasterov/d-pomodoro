@@ -1,16 +1,12 @@
 import { View, Text } from 'react-native';
 import { Layout } from '@/components/Layout';
-import type { TUseMachineReturn } from '@/types/useMachineReturn.type';
+import type { TRestProps } from '@/types/screens/rest.type';
 
-type TRestProps = {
-  setupStart: TUseMachineReturn['setupStart'];
-};
-
-export function Rest({ setupStart }: TRestProps) {
-  console.log(setupStart);
+export function Rest({ restStart }: TRestProps) {
+  console.log(restStart);
 
   return (
-    <Layout>
+    <Layout title="title" subtitle="subtitle">
       <View>
         <Text>Rest Screen</Text>
       </View>

@@ -7,7 +7,7 @@ import { eventType } from '@core/constants/events.const';
 import { machineState } from '@core/constants/machine.const';
 import type { TEvent } from '@core/types/events.type';
 import type { TRestKind } from '@core/types/common.type';
-import type { TUseMachineReturn } from '@/types/useMachineReturn.type';
+import type { TUseMachineReturn } from '@/types/hooks/useMachineReturn.type';
 
 export function useMachine(): TUseMachineReturn {
   const getNowMs = () => Date.now();

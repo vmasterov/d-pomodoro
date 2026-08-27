@@ -1,6 +1,10 @@
 import { Pressable, Text, StyleSheet, View } from 'react-native';
 import { theme } from '@/constants/theme.const';
-import type { TButtonComponent, TButtonProps, TButtonVariant } from '@/types/button.type';
+import type {
+  TButtonComponent,
+  TButtonProps,
+  TButtonVariant,
+} from '@/types/components/button.type';
 import { buttonMod, buttonVariant } from '@/constants/component.const';
 import type { PropsWithChildren } from 'react';
 
