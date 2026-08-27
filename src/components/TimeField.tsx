@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from '@/components/Button';
 import { theme } from '@/constants/theme.const';
-import type { TTimeFieldProps } from '@/types/timeField.type';
+import type { TTimeFieldProps } from '@/types/components/timeField.type';
 import { buttonMod, buttonVariant } from '@/constants/component.const';
 
 export function TimeField({ onPress, formattedTime, label, error }: TTimeFieldProps) {

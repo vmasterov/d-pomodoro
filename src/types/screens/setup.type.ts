@@ -1,4 +1,4 @@
-import type { TUseMachineReturn } from '@/types/useMachineReturn.type';
+import type { TUseMachineReturn } from '@/types/hooks/useMachineReturn.type';
 
 export type TSetupProps = {
   setupStart: TUseMachineReturn['setupStart'];

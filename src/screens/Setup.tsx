@@ -1,11 +1,11 @@
 import { Layout } from '@/components/Layout';
-import type { TSetupProps } from '@/types/setup.type';
+import type { TSetupProps } from '@/types/screens/setup.type';
 import { TimeRange } from '@/components/TimeRange';
 import { Button } from '@/components/Button';
 import { buttonVariant } from '@/constants/component.const';
 import { useEffect, useState } from 'react';
 import { loadSettings, saveSettings } from '@storage/index';
-import type { TTimeRange } from '@/types/timeRange.type';
+import type { TTimeRange } from '@/types/components/timeRange.type';
 
 export function Setup({ setupStart }: TSetupProps) {
   const [startTimestamp, setStartTimestamp] = useState<number | null>(null);

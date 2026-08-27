@@ -1,16 +1,12 @@
 import { View, Text } from 'react-native';
 import { Layout } from '@/components/Layout';
-import type { TUseMachineReturn } from '@/types/useMachineReturn.type';
+import type { TWorkProps } from '@/types/screens/work.type';
 
-type TWorkProps = {
-  setupStart: TUseMachineReturn['setupStart'];
-};
-
-export function Work({ setupStart }: TWorkProps) {
-  console.log(setupStart);
+export function Work({ workStart }: TWorkProps) {
+  console.log(workStart);
 
   return (
-    <Layout>
+    <Layout title="title" subtitle="subtitle">
       <View>
         <Text>Work Screen</Text>
       </View>

@@ -2,7 +2,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, Text, View } from 'react-native';
 import type { PropsWithChildren } from 'react';
 import { theme } from '@/constants/theme.const';
-import type { TLayoutProps } from '@/types/layout.type';
+import type { TLayoutProps } from '@/types/components/layout.type';
 
 export function Layout({ children, title, subtitle }: PropsWithChildren<TLayoutProps>) {
   return (
