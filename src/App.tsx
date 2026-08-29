@@ -38,7 +38,13 @@ export default function App() {
         return <Rest workStart={workStart} reset={reset} nowMs={nowMs} snapshot={snapshot} />;
       }
       case machineState.FINISHED: {
-        return <Finished finishConfirm={finishConfirm} />;
+        return (
+          <Finished
+            finishConfirm={finishConfirm}
+            rangeStart={snapshot.rangeStart}
+            rangeEnd={snapshot.rangeEnd}
+          />
+        );
       }
       default: {
         const _exhaustive: never = snapshot;

@@ -41,7 +41,7 @@ type TSpacing = {
   radius: TRadius;
 };
 
-type TFont = TextStyle;
+type TFont = Pick<TextStyle, 'fontSize' | 'fontWeight' | 'fontFamily' | 'lineHeight'>;
 
 type TTypography = {
   title: TFont;
@@ -52,6 +52,7 @@ type TTypography = {
   button: TFont;
   hint: TFont;
   moreHourDowntime: TFont;
+  finishedTimeRange: TFont;
 };
 
 export type TTheme = {

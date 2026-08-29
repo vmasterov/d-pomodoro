@@ -37,9 +37,10 @@ export function Pending({ nowMs, rangeStart, reset, workStart }: TPendingProps) 
           </Button>
         </Fragment>
       }
-    ></Layout>
+    />
   );
 }
+
 const styles = StyleSheet.create({
   label: {
     ...theme.typography.label,
