@@ -51,6 +51,7 @@ type TTypography = {
   fieldValue: TFont;
   button: TFont;
   hint: TFont;
+  moreHourDowntime: TFont;
 };
 
 export type TTheme = {
