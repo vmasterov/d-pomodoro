@@ -69,5 +69,9 @@ export const theme: TTheme = {
       fontSize: 48,
       fontWeight: '700',
     },
+    finishedTimeRange: {
+      fontSize: 48,
+      fontWeight: '700',
+    },
   },
 } as const;
