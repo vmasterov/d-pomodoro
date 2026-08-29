@@ -56,16 +56,19 @@ export function Setup({ setupStart }: TSetupProps) {
     <Layout
       title="Рабочий диапазон"
       subtitle="Когда сегодня начинается и&nbsp;заканчивается работа"
-    >
-      <TimeRange
-        startDate={startDate}
-        endDate={endDate}
-        updateRangeField={updateRangeFieldHandler}
-        errors={{ endDateErrorText: endError }}
-      />
-      <Button onPress={onPressHandler} variant={buttonVariant.ACCENT} disabled={isDisabled}>
-        Старт
-      </Button>
-    </Layout>
+      content={
+        <TimeRange
+          startDate={startDate}
+          endDate={endDate}
+          updateRangeField={updateRangeFieldHandler}
+          errors={{ endDateErrorText: endError }}
+        />
+      }
+      controls={
+        <Button onPress={onPressHandler} variant={buttonVariant.ACCENT} disabled={isDisabled}>
+          Старт
+        </Button>
+      }
+    />
   );
 }

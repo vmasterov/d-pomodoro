@@ -8,24 +8,23 @@ import { buttonVariant } from '@/constants/component.const';
 import { theme } from '@/constants/theme.const';
 import { restDuration, restKind } from '@core/constants/segment.const';
 import type { TRestKind } from '@core/types/common.type';
-import { convertRemainingMsToFormattedSting } from '@core/utils/date.util';
+import { convertRemainingMsToFormattedTime } from '@core/utils/date.util';
+import { Fragment } from 'react';
+import { MS_PER_HOUR } from '@core/constants/common.const';
 
 export function Work({ restStart, reset, nowMs, snapshot }: TWorkProps) {
   const currentRemainingMs = remainingMs(snapshot, nowMs);
-  const formattedTime = convertRemainingMsToFormattedSting(currentRemainingMs);
+  const formattedTime = convertRemainingMsToFormattedTime(currentRemainingMs);
 
-  const currentRestKind = recommendedRest(snapshot.workSegmentCount);
-
-  const getRestButtonKind = (kind: TRestKind): TRestKind => {
-    return currentRestKind === kind ? restKind.SHORT : restKind.LONG;
-  };
+  const primaryKind: TRestKind = recommendedRest(snapshot.workSegmentCount);
+  const secondaryKind: TRestKind = primaryKind === restKind.SHORT ? restKind.LONG : restKind.SHORT;
 
   const getRestButtonText = (kind: TRestKind) => {
-    return `Отдых ${restDuration[getRestButtonKind(kind)]} мин`;
+    return `Отдых ${restDuration[kind]} мин`;
   };
 
   const recommendedRestText =
-    currentRestKind === restKind.SHORT
+    primaryKind === restKind.SHORT
       ? 'Рекомендуется короткий перерыв'
       : 'Рекомендуется длинный перерыв';
 
@@ -33,40 +32,41 @@ export function Work({ restStart, reset, nowMs, snapshot }: TWorkProps) {
 
   const restInfoText = isNegativeTime ? 'Перерыв просрочен на' : 'До перерыва';
 
+  const isMoreHourDowntime = Math.abs(currentRemainingMs) >= MS_PER_HOUR;
+
   return (
-    <Layout title="Работа">
-      <View>
-        <Text style={styles.label}>{restInfoText}</Text>
-        <Clock formattedTime={formattedTime} isNegative={isNegativeTime} />
-      </View>
+    <Layout
+      title="Работа"
+      content={
+        <View>
+          {isMoreHourDowntime ? (
+            <Text style={styles.moreHourDowntime}>Простой более часа</Text>
+          ) : (
+            <Fragment>
+              <Text style={styles.label}>{restInfoText}</Text>
+              <Clock formattedTime={formattedTime} isNegative={isNegativeTime} />
+            </Fragment>
+          )}
+        </View>
+      }
+      controls={
+        <Fragment>
+          <Text style={styles.label}>{recommendedRestText}</Text>
 
-      <Text>Закончить этот экран</Text>
-      <Text>
-        Написать тесты к convertRemainingMsToFormattedSting и convertDateToFormattedString
-      </Text>
+          <Button onPress={() => restStart(primaryKind)} variant={buttonVariant.ACCENT}>
+            {getRestButtonText(primaryKind)}
+          </Button>
 
-      <View>
-        <Text style={styles.label}>{recommendedRestText}</Text>
+          <Button onPress={() => restStart(secondaryKind)} variant={buttonVariant.DEFAULT}>
+            {getRestButtonText(secondaryKind)}
+          </Button>
 
-        <Button
-          onPress={() => restStart(getRestButtonKind(restKind.SHORT))}
-          variant={buttonVariant.ACCENT}
-        >
-          {getRestButtonText(restKind.SHORT)}
-        </Button>
-
-        <Button
-          onPress={() => restStart(getRestButtonKind(restKind.LONG))}
-          variant={buttonVariant.DEFAULT}
-        >
-          {getRestButtonText(restKind.LONG)}
-        </Button>
-
-        <Button onPress={reset} variant={buttonVariant.DANGER}>
-          Выключить
-        </Button>
-      </View>
-    </Layout>
+          <Button onPress={reset} variant={buttonVariant.DANGER}>
+            Выключить
+          </Button>
+        </Fragment>
+      }
+    />
   );
 }
 
@@ -75,5 +75,11 @@ const styles = StyleSheet.create({
     ...theme.typography.label,
     textAlign: 'center',
     color: theme.color.mutedText,
+  },
+
+  moreHourDowntime: {
+    ...theme.typography.moreHourDowntime,
+    textAlign: 'center',
+    color: theme.color.danger,
   },
 });

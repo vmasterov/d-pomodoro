@@ -1,4 +1,4 @@
-import { MS_PER_MINUTE } from '@core/constants/common.const';
+import { MS_PER_MINUTE, MS_PER_SECOND, SECONDS_PER_MINUTE } from '@core/constants/common.const';
 
 export function getTimeFromTimestamp(nowMs: number, timestamp: number, dayOffset = 0): number {
   const dateNow = new Date(nowMs);
@@ -13,17 +13,21 @@ export function getTimeFromTimestamp(nowMs: number, timestamp: number, dayOffset
   ).getTime();
 }
 
-export function convertDateToFormattedString(date: Date): string {
+export function convertDateToFormattedTime(date: Date): string {
   const formatHours = String(date.getHours()).padStart(2, '0');
   const formatMinutes = String(date.getMinutes()).padStart(2, '0');
 
   return `${formatHours}:${formatMinutes}`;
 }
 
-export function convertRemainingMsToFormattedSting(ms: number) {
-  const positiveMs = ms < 0 ? ms * -1 : ms;
-  const formatMinutes = String(Math.floor(positiveMs / 1000 / 60)).padStart(2, '0');
-  const formatSeconds = String(Math.floor((positiveMs % MS_PER_MINUTE) / 1000)).padStart(2, '0');
+export function convertRemainingMsToFormattedTime(ms: number): string {
+  const positiveMs = Math.abs(ms);
+
+  const minutes = Math.floor(positiveMs / MS_PER_SECOND / SECONDS_PER_MINUTE);
+  const seconds = Math.floor((positiveMs % MS_PER_MINUTE) / MS_PER_SECOND);
+
+  const formatMinutes = String(minutes).padStart(2, '0');
+  const formatSeconds = String(seconds).padStart(2, '0');
 
   return `${formatMinutes}:${formatSeconds}`;
 }

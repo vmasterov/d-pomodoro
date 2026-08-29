@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { theme } from '@/constants/theme.const';
-import { convertDateToFormattedString } from '@core/utils/date.util';
+import { convertDateToFormattedTime } from '@core/utils/date.util';
 import { TIMEPICKER_PLACEHOLDER } from '@/constants/component.const';
 import type { TTimeRange } from '@/types/components/timeRange.type';
 import { TimeField } from '@/components/TimeField';
@@ -9,10 +9,10 @@ import type { TFieldType } from '@/types/components/timeField.type';
 
 export function TimeRange({ startDate, endDate, updateRangeField, errors }: TTimeRange) {
   const formattedStartTime = startDate
-    ? convertDateToFormattedString(startDate)
+    ? convertDateToFormattedTime(startDate)
     : TIMEPICKER_PLACEHOLDER;
 
-  const formattedEndTime = endDate ? convertDateToFormattedString(endDate) : TIMEPICKER_PLACEHOLDER;
+  const formattedEndTime = endDate ? convertDateToFormattedTime(endDate) : TIMEPICKER_PLACEHOLDER;
 
   const showTimepicker = (date: Date | null, fieldType: TFieldType) => {
     DateTimePickerAndroid.open({

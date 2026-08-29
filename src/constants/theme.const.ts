@@ -36,6 +36,7 @@ export const theme: TTheme = {
     title: {
       fontSize: 38,
       fontWeight: '800',
+      lineHeight: 34,
     },
     subtitle: {
       fontSize: 18,
@@ -63,6 +64,10 @@ export const theme: TTheme = {
     hint: {
       fontSize: 13,
       fontWeight: '400',
+    },
+    moreHourDowntime: {
+      fontSize: 48,
+      fontWeight: '700',
     },
   },
 } as const;
