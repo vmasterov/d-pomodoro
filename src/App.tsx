@@ -35,7 +35,7 @@ export default function App() {
         return <Work restStart={restStart} reset={reset} nowMs={nowMs} snapshot={snapshot} />;
       }
       case machineState.REST: {
-        return <Rest workStart={workStart} />;
+        return <Rest workStart={workStart} reset={reset} nowMs={nowMs} snapshot={snapshot} />;
       }
       case machineState.FINISHED: {
         return <Finished finishConfirm={finishConfirm} />;
