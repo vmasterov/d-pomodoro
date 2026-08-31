@@ -1,4 +1,4 @@
-import { MS_PER_MINUTE, MS_PER_SECOND, SECONDS_PER_MINUTE } from '@core/constants/common.const';
+import { MS_PER_SECOND, SECONDS_PER_MINUTE } from '@core/constants/common.const';
 
 export function getTimeFromTimestamp(nowMs: number, timestamp: number, dayOffset = 0): number {
   const dateNow = new Date(nowMs);
@@ -21,10 +21,13 @@ export function convertDateToFormattedTime(date: Date): string {
 }
 
 export function convertRemainingMsToFormattedTime(ms: number): string {
-  const positiveMs = Math.abs(ms);
+  const absMs = Math.abs(ms);
+  const rawTotalSeconds = absMs / MS_PER_SECOND;
+  const isDowntime = ms <= 0;
+  const totalSeconds = isDowntime ? Math.floor(rawTotalSeconds) : Math.ceil(rawTotalSeconds);
 
-  const minutes = Math.floor(positiveMs / MS_PER_SECOND / SECONDS_PER_MINUTE);
-  const seconds = Math.floor((positiveMs % MS_PER_MINUTE) / MS_PER_SECOND);
+  const minutes = Math.floor(totalSeconds / SECONDS_PER_MINUTE);
+  const seconds = Math.floor(totalSeconds % SECONDS_PER_MINUTE);
 
   const formatMinutes = String(minutes).padStart(2, '0');
   const formatSeconds = String(seconds).padStart(2, '0');

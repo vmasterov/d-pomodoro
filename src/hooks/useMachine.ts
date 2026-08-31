@@ -25,7 +25,10 @@ export function useMachine(): TUseMachineReturn {
       return;
     }
 
-    const newSnapshot = reduce(snapshot, event, getNowMs());
+    const nowMs = getNowMs();
+    setNowMs(nowMs);
+
+    const newSnapshot = reduce(snapshot, event, nowMs);
     commit(newSnapshot);
   };
 
