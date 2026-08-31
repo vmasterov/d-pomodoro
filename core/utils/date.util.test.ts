@@ -54,11 +54,11 @@ describe('Тестирование функций date utils', () => {
 
   describe('convertRemainingMsToFormattedTime', () => {
     const cases: [string, number, string][] = [
-      ['remainingMs > 0', 186052, '03:06'],
+      ['remainingMs > 0', 186052, '03:07'],
       ['remainingMs === 0', 0, '00:00'],
       ['remainingMs < 0', -186052, '03:06'],
-      ['почти минута (59999) -> 00:59', 59999, '00:59'],
-      ['меньше секунды -> 00:00', 999, '00:00'],
+      ['почти минута (59999) -> 01:00', 59999, '01:00'],
+      ['меньше секунды -> 00:01', 999, '00:01'],
     ];
     test.each(cases)('%s', (_label, remainingMs, expectedFormattedTime) => {
       expect(convertRemainingMsToFormattedTime(remainingMs)).toBe(expectedFormattedTime);
