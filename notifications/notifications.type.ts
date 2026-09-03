@@ -4,9 +4,7 @@ export type TScheduleNotification = {
   date: number;
 };
 
-export type TAddRangeEndNotificationProps = {
+export type TGetRangeEndNotificationProps = {
   rangeStart: number;
   rangeEnd: number;
-  notifications: TScheduleNotification[];
-  nowMs: number;
 };

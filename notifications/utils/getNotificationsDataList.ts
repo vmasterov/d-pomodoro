@@ -1,63 +1,50 @@
 import type { TSnapshot } from '@core/types/snapshot.type';
 import { machineState } from '@core/constants/machine.const';
-import { convertDateToFormattedTime } from '@core/utils/date.util';
-import { restDuration, workDuration } from '@core/constants/segment.const';
-import { MS_PER_5_MINUTES, MS_PER_MINUTE } from '@core/constants/common.const';
-import type { TAddRangeEndNotificationProps, TScheduleNotification } from '../notifications.type';
-
-const addRangeEndNotification = ({
-  rangeStart,
-  rangeEnd,
-  notifications,
-  nowMs,
-}: TAddRangeEndNotificationProps) => {
-  const formattedRangeStart = convertDateToFormattedTime(new Date(rangeStart));
-  const formattedRangeEnd = convertDateToFormattedTime(new Date(rangeEnd));
-
-  if (rangeEnd > nowMs) {
-    notifications.push({
-      title: 'День окончен',
-      body: `Рабочий диапазон ${formattedRangeStart}–${formattedRangeEnd} завершён`,
-      date: rangeEnd,
-    });
-  }
-};
+import { MS_PER_5_MINUTES } from '@core/constants/common.const';
+import type { TScheduleNotification } from '../notifications.type';
+import { getRangeEndNotification } from './getRangeEndNotification';
+import { segmentDurationMs } from '@core/selectors/selectors';
 
 export function getNotificationsDataList(
   snapshot: TSnapshot,
   nowMs: number,
 ): TScheduleNotification[] {
   const notifications: TScheduleNotification[] = [];
+  const { state } = snapshot;
 
-  switch (snapshot.state) {
+  if (
+    (state === machineState.PENDING ||
+      state === machineState.WORK ||
+      state === machineState.REST) &&
+    snapshot.rangeEnd > nowMs
+  ) {
+    const rangeEndNotification = getRangeEndNotification({
+      rangeStart: snapshot.rangeStart,
+      rangeEnd: snapshot.rangeEnd,
+    });
+
+    notifications.push(rangeEndNotification);
+  }
+
+  switch (state) {
     case machineState.PENDING: {
-      if (snapshot.rangeStart > nowMs) {
+      const { rangeStart } = snapshot;
+
+      if (rangeStart > nowMs) {
         notifications.push({
           title: 'Пора начинать работу',
           body: `Откройте приложение и запустите рабочий сегмент.`,
-          date: snapshot.rangeStart,
+          date: rangeStart,
         });
       }
 
-      addRangeEndNotification({
-        rangeStart: snapshot.rangeStart,
-        rangeEnd: snapshot.rangeEnd,
-        notifications,
-        nowMs,
-      });
       break;
     }
     case machineState.WORK: {
-      addRangeEndNotification({
-        rangeStart: snapshot.rangeStart,
-        rangeEnd: snapshot.rangeEnd,
-        notifications,
-        nowMs,
-      });
+      const { rangeEnd, segmentStart } = snapshot;
+      const notificationWorkTimestamp = segmentDurationMs(snapshot) + segmentStart;
 
-      const notificationWorkTimestamp = snapshot.segmentStart + workDuration;
-
-      if (notificationWorkTimestamp > nowMs && notificationWorkTimestamp < snapshot.rangeEnd) {
+      if (notificationWorkTimestamp > nowMs && notificationWorkTimestamp < rangeEnd) {
         notifications.push({
           title: 'Пора отдохнуть',
           body: `Рабочий сегмент завершён. Откройте приложение и выберите перерыв.`,
@@ -66,11 +53,11 @@ export function getNotificationsDataList(
       }
 
       const fiveMinutesNotificationWorkTimestamp =
-        snapshot.segmentStart + workDuration - MS_PER_5_MINUTES;
+        segmentDurationMs(snapshot) + segmentStart - MS_PER_5_MINUTES;
 
       if (
         fiveMinutesNotificationWorkTimestamp > nowMs &&
-        fiveMinutesNotificationWorkTimestamp < snapshot.rangeEnd
+        fiveMinutesNotificationWorkTimestamp < rangeEnd
       ) {
         notifications.push({
           title: 'Скоро перерыв',
@@ -82,17 +69,11 @@ export function getNotificationsDataList(
       break;
     }
     case machineState.REST: {
-      addRangeEndNotification({
-        rangeStart: snapshot.rangeStart,
-        rangeEnd: snapshot.rangeEnd,
-        notifications,
-        nowMs,
-      });
+      const { rangeEnd, segmentStart } = snapshot;
 
-      const currentRestDuration = restDuration[snapshot.restKind] * MS_PER_MINUTE;
-      const notificationRestTimestamp = snapshot.segmentStart + currentRestDuration;
+      const notificationRestTimestamp = segmentStart + segmentDurationMs(snapshot);
 
-      if (notificationRestTimestamp > nowMs && notificationRestTimestamp < snapshot.rangeEnd) {
+      if (notificationRestTimestamp > nowMs && notificationRestTimestamp < rangeEnd) {
         notifications.push({
           title: 'Пора вернуться к работе',
           body: `Отдых завершён. Откройте приложение и запустите рабочий сегмент.`,
