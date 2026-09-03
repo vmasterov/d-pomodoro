@@ -2,6 +2,8 @@ import { cancelAllScheduledNotifications, scheduleNotification } from './notific
 import { getNotificationsDataList } from './utils/getNotificationsDataList';
 import type { TSnapshot } from '@core/types/snapshot.type';
 
+export { registerForNotificationsAsync } from './notifications';
+
 export async function setNotification(snapshot: TSnapshot, nowMs: number) {
   await cancelAllScheduledNotifications();
 

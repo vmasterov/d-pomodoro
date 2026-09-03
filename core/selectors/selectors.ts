@@ -5,9 +5,7 @@ import { workDuration, restDuration, restKind } from '@core/constants/segment.co
 import type { TRestKind } from '@core/types/common.type';
 
 export function remainingMs(snapshot: TWorkSnapshot | TRestSnapshot, nowMs: number): number {
-  const duration =
-    snapshot.state === machineState.WORK ? workDuration : restDuration[snapshot.restKind];
-  return duration * MS_PER_MINUTE + snapshot.segmentStart - nowMs;
+  return segmentDurationMs(snapshot) + snapshot.segmentStart - nowMs;
 }
 
 export function isRangeOver(rangeEnd: number, nowMs: number): boolean {
@@ -28,4 +26,10 @@ export function getActiveRangeEnd(snapshot: TSnapshot | null) {
   }
 
   return snapshot.rangeEnd;
+}
+
+export function segmentDurationMs(snapshot: TWorkSnapshot | TRestSnapshot): number {
+  return snapshot.state === machineState.WORK
+    ? workDuration * MS_PER_MINUTE
+    : restDuration[snapshot.restKind] * MS_PER_MINUTE;
 }
