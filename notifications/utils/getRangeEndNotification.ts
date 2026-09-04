@@ -1,5 +1,5 @@
 import { convertDateToFormattedTime } from '@core/utils/date.util';
-import type { TGetRangeEndNotificationProps } from '../notifications.type';
+import type { TGetRangeEndNotificationProps } from '@notifications/notifications.type';
 
 export const getRangeEndNotification = ({
   rangeStart,

@@ -1,8 +1,8 @@
 import type { TSnapshot } from '@core/types/snapshot.type';
 import { machineState } from '@core/constants/machine.const';
 import { MS_PER_5_MINUTES } from '@core/constants/common.const';
-import type { TScheduleNotification } from '../notifications.type';
-import { getRangeEndNotification } from './getRangeEndNotification';
+import type { TScheduleNotification } from '@notifications/notifications.type';
+import { getRangeEndNotification } from '@notifications/utils/getRangeEndNotification';
 import { segmentDurationMs } from '@core/selectors/selectors';
 
 export function getNotificationsDataList(

@@ -22,6 +22,9 @@
       "@storage/*": [
         "./storage/*"
       ],
+      "@notifications/*": [
+        "./notifications/*"
+      ],
       "@testUtils/*": [
         "./testUtils/*"
       ]

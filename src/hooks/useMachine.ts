@@ -8,7 +8,7 @@ import { machineState } from '@core/constants/machine.const';
 import type { TEvent } from '@core/types/events.type';
 import type { TRestKind } from '@core/types/common.type';
 import type { TUseMachineReturn } from '@/types/hooks/useMachineReturn.type';
-import { registerForNotificationsAsync, setNotification } from '../../notifications';
+import { registerForNotificationsAsync, setNotification } from '@notifications/index';
 
 export function useMachine(): TUseMachineReturn {
   const getNowMs = () => Date.now();
