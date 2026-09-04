@@ -1,9 +1,9 @@
-export const convertHoursToTimestamp = (h: number, m = 0, dayOffset = 0): number => {
-  const now = new Date('2026-07-21T00:00:00');
+import { date } from '@testUtils/baseDate';
 
-  const y = now.getFullYear();
-  const M = now.getMonth();
-  const d = now.getDate();
+export function convertHoursToTimestamp(h: number, m = 0, dayOffset = 0): number {
+  const y = date.getFullYear();
+  const M = date.getMonth();
+  const d = date.getDate();
 
   return new Date(y, M, d + dayOffset, h, m).getTime();
-};
+}

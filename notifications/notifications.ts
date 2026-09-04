@@ -1,7 +1,7 @@
 import * as Notifications from 'expo-notifications';
-import type { TScheduleNotification } from './notifications.type';
+import type { TScheduleNotification } from '@notifications/notifications.type';
 import { Platform } from 'react-native';
-import { NOTIFICATION_CHANNEL_ID } from './consstants.const';
+import { NOTIFICATION_CHANNEL_ID } from '@notifications/consstants.const';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

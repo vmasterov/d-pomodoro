@@ -1,8 +1,11 @@
-import { cancelAllScheduledNotifications, scheduleNotification } from './notifications';
+import {
+  cancelAllScheduledNotifications,
+  scheduleNotification,
+} from '@notifications/notifications';
 import { getNotificationsDataList } from './utils/getNotificationsDataList';
 import type { TSnapshot } from '@core/types/snapshot.type';
 
-export { registerForNotificationsAsync } from './notifications';
+export { registerForNotificationsAsync } from '@notifications/notifications';
 
 export async function setNotification(snapshot: TSnapshot, nowMs: number) {
   await cancelAllScheduledNotifications();
