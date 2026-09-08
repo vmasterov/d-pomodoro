@@ -119,8 +119,8 @@ describe('Тестирование getNotificationsDataList', () => {
   });
 
   describe('REST LONG', () => {
-    const restEnd = convertHoursToTimestamp(9, 7);
-    const eveningRestEnd = convertHoursToTimestamp(17, 46);
+    const restEnd = convertHoursToTimestamp(9, 10);
+    const eveningRestEnd = convertHoursToTimestamp(17, 49);
 
     runCases([
       [
@@ -157,8 +157,8 @@ describe('Тестирование getNotificationsDataList', () => {
   });
 
   describe('REST SHORT', () => {
-    const restEnd = convertHoursToTimestamp(9, 3);
-    const eveningRestEnd = convertHoursToTimestamp(17, 42);
+    const restEnd = convertHoursToTimestamp(9, 6);
+    const eveningRestEnd = convertHoursToTimestamp(17, 45);
 
     runCases([
       [

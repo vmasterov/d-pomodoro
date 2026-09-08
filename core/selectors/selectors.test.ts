@@ -35,9 +35,9 @@ describe('Тестирование selectors', () => {
 
     describe('REST: LONG', () => {
       const cases: [string, number, number][] = [
-        ['осталось 3 минуты до конца сегмента', convertHoursToTimestamp(15, 2), 3 * MS_PER_MINUTE],
-        ['осталось 0 минут до конца сегмента', convertHoursToTimestamp(15, 5), 0],
-        ['сегмент завершился 5 минут назад', convertHoursToTimestamp(15, 10), -5 * MS_PER_MINUTE],
+        ['осталось 3 минуты до конца сегмента', convertHoursToTimestamp(15, 5), 3 * MS_PER_MINUTE],
+        ['осталось 0 минут до конца сегмента', convertHoursToTimestamp(15, 8), 0],
+        ['сегмент завершился 5 минут назад', convertHoursToTimestamp(15, 13), -5 * MS_PER_MINUTE],
       ];
 
       test.each(cases)('%s', (_label, nowMs, expectedMs) => {
@@ -56,9 +56,9 @@ describe('Тестирование selectors', () => {
 
     describe('REST: SHORT', () => {
       const cases: [string, number, number][] = [
-        ['осталось 1 минута до конца сегмента', convertHoursToTimestamp(15, 1), 1 * MS_PER_MINUTE],
-        ['осталось 0 минут до конца сегмента', convertHoursToTimestamp(15, 2), 0],
-        ['сегмент завершился 5 минут назад', convertHoursToTimestamp(15, 7), -5 * MS_PER_MINUTE],
+        ['осталось 1 минута до конца сегмента', convertHoursToTimestamp(15, 4), 1 * MS_PER_MINUTE],
+        ['осталось 0 минут до конца сегмента', convertHoursToTimestamp(15, 5), 0],
+        ['сегмент завершился 5 минут назад', convertHoursToTimestamp(15, 10), -5 * MS_PER_MINUTE],
       ];
 
       test.each(cases)('%s', (_label, nowMs, expectedMs) => {
