@@ -15,15 +15,12 @@
         "backgroundColor": "#E6F4FE"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.vm7.dpomodoro",
-      "versionCode": 1
+      "package": "com.vm7.dpomodoro"
     },
     "experiments": {
       "reactCompiler": true
     },
-    "plugins": [
-      "@react-native-community/datetimepicker"
-    ],
+    "plugins": ["@react-native-community/datetimepicker"],
     "extra": {
       "eas": {
         "projectId": "b8140461-a507-417b-a35b-0ea2b0e340f3"
