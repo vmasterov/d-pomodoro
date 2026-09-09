@@ -15,7 +15,8 @@
         "backgroundColor": "#E6F4FE"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.vm7.dpomodoro"
+      "package": "com.vm7.dpomodoro",
+      "permissions": ["android.permission.SCHEDULE_EXACT_ALARM"]
     },
     "experiments": {
       "reactCompiler": true
