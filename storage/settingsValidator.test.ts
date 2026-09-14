@@ -1,6 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { settingsValidator } from './settingsValidator';
 import { startTimestamp, endTimestamp } from '@testUtils/fixtures';
+import { intervals } from '@core/constants/segment.const';
 
 describe('Тестирование settingsValidator', () => {
   describe('НЕ ОБЪЕКТ', () => {
@@ -20,6 +21,7 @@ describe('Тестирование settingsValidator', () => {
       expect(settingsValidator({ startTimestamp, endTimestamp })).toEqual({
         startTimestamp,
         endTimestamp,
+        ...intervals,
       });
     });
 
@@ -27,6 +29,7 @@ describe('Тестирование settingsValidator', () => {
       expect(settingsValidator({ startTimestamp: 0, endTimestamp })).toEqual({
         startTimestamp: 0,
         endTimestamp,
+        ...intervals,
       });
     });
 
@@ -34,6 +37,7 @@ describe('Тестирование settingsValidator', () => {
       expect(settingsValidator({ startTimestamp, endTimestamp, legacyField: 'x' })).toEqual({
         startTimestamp,
         endTimestamp,
+        ...intervals,
       });
     });
   });

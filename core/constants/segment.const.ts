@@ -3,9 +3,19 @@ export const restKind = {
   SHORT: 'short',
 } as const;
 
-export const workDuration = 30 as const;
+export const WORK_DURATION = 30 as const;
 
-export const restDuration = {
+export const ALERT_WORK_TIME = 5 as const;
+
+export const restDuration = Object.freeze({
   long: 8,
   short: 5,
-} as const;
+});
+
+export const intervals = Object.freeze({
+  workDuration: WORK_DURATION,
+  alertWorkTime: ALERT_WORK_TIME,
+  restDuration,
+});
+
+export const LIMIT = 240 as const;
