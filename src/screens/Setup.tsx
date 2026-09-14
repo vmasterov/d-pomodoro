@@ -6,8 +6,11 @@ import { buttonVariant } from '@/constants/component.const';
 import { useEffect, useState } from 'react';
 import { loadSettings, saveSettings } from '@storage/index';
 import type { TTimeRange } from '@/types/components/timeRange.type';
+import { intervals } from '@core/constants/segment.const';
+import type { TIntervals } from '@core/types/validators.type';
 
 export function Setup({ setupStart }: TSetupProps) {
+  const [initialIntervals, setInitialIntervals] = useState<TIntervals>(intervals);
   const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
   const [endTimestamp, setEndTimestamp] = useState<number | null>(null);
 
@@ -36,7 +39,7 @@ export function Setup({ setupStart }: TSetupProps) {
     }
 
     setupStart(startTimestamp, endTimestamp);
-    void saveSettings({ startTimestamp, endTimestamp });
+    void saveSettings({ startTimestamp, endTimestamp, ...initialIntervals });
   };
 
   const initTimeStates = async () => {
@@ -45,6 +48,12 @@ export function Setup({ setupStart }: TSetupProps) {
     if (settings) {
       setStartTimestamp(settings.startTimestamp);
       setEndTimestamp(settings.endTimestamp);
+
+      setInitialIntervals({
+        workDuration: settings.workDuration,
+        alertWorkTime: settings.alertWorkTime,
+        restDuration: settings.restDuration,
+      });
     }
   };
 
