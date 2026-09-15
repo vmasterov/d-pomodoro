@@ -1,5 +1,5 @@
 import { machineState } from '@core/constants/machine.const';
-import { restKind } from '@core/constants/segment.const';
+import { intervals, restKind } from '@core/constants/segment.const';
 import type {
   TSetupSnapshot,
   TPendingSnapshot,
@@ -19,6 +19,7 @@ export const setupSnapshot: TSetupSnapshot = {
 export const pendingSnapshot: TPendingSnapshot = {
   state: machineState.PENDING,
   ...range,
+  ...intervals,
 };
 
 export const workSnapshot: TWorkSnapshot = {
@@ -26,6 +27,7 @@ export const workSnapshot: TWorkSnapshot = {
   ...range,
   segmentStart: convertHoursToTimestamp(9),
   workSegmentCount: 1,
+  ...intervals,
 };
 
 export const restLongSnapshot: TRestSnapshot = {
@@ -34,6 +36,7 @@ export const restLongSnapshot: TRestSnapshot = {
   restKind: restKind.LONG,
   segmentStart: convertHoursToTimestamp(9, 2),
   workSegmentCount: 1,
+  ...intervals,
 };
 
 export const restShortSnapshot: TRestSnapshot = {
@@ -42,6 +45,7 @@ export const restShortSnapshot: TRestSnapshot = {
   restKind: restKind.SHORT,
   segmentStart: convertHoursToTimestamp(9, 1),
   workSegmentCount: 1,
+  ...intervals,
 };
 
 export const finishedSnapshot: TFinishedSnapshot = {

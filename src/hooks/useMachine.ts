@@ -6,7 +6,7 @@ import { reduce } from '@core/reduce';
 import { eventType } from '@core/constants/events.const';
 import { machineState } from '@core/constants/machine.const';
 import type { TEvent } from '@core/types/events.type';
-import type { TRestKind } from '@core/types/common.type';
+import type { TRestKind, TSettings } from '@core/types/common.type';
 import type { TUseMachineReturn } from '@/types/hooks/useMachineReturn.type';
 import { registerForNotificationsAsync, setNotification } from '@notifications/index';
 
@@ -38,11 +38,10 @@ export function useMachine(): TUseMachineReturn {
     commit(newSnapshot);
   };
 
-  const setupStart = (startTimestamp: number, endTimestamp: number) => {
+  const setupStart = (settings: TSettings) => {
     dispatcher({
       type: eventType.SETUP_START,
-      startTimestamp,
-      endTimestamp,
+      ...settings,
     });
   };
   const reset = () => {

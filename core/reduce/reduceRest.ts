@@ -31,6 +31,9 @@ export function reduceRest(snapshot: TRestSnapshot, event: TEvent, nowMs: number
         rangeEnd: snapshot.rangeEnd,
         segmentStart: nowMs,
         workSegmentCount: snapshot.workSegmentCount,
+        workDuration: snapshot.workDuration,
+        alertWorkTime: snapshot.alertWorkTime,
+        restDuration: snapshot.restDuration,
       };
   }
 

@@ -1,5 +1,5 @@
 import { machineState } from '@core/constants/machine.const';
-import type { TRestKind } from '@core/types/common.type';
+import type { TRestKind, TSegmentIntervals } from '@core/types/common.type';
 
 export type TSetupSnapshot = {
   state: typeof machineState.SETUP;
@@ -9,7 +9,7 @@ export type TPendingSnapshot = {
   state: typeof machineState.PENDING;
   rangeStart: number;
   rangeEnd: number;
-};
+} & TSegmentIntervals;
 
 export type TWorkSnapshot = {
   state: typeof machineState.WORK;
@@ -17,7 +17,7 @@ export type TWorkSnapshot = {
   rangeEnd: number;
   segmentStart: number;
   workSegmentCount: number;
-};
+} & TSegmentIntervals;
 
 export type TRestSnapshot = {
   state: typeof machineState.REST;
@@ -26,7 +26,7 @@ export type TRestSnapshot = {
   restKind: TRestKind;
   segmentStart: number;
   workSegmentCount: number;
-};
+} & TSegmentIntervals;
 
 export type TFinishedSnapshot = {
   state: typeof machineState.FINISHED;

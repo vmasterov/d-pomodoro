@@ -1,7 +1,7 @@
 import type { TWorkSnapshot, TRestSnapshot, TSnapshot } from '@core/types/snapshot.type';
 import { MS_PER_MINUTE } from '@core/constants/common.const';
 import { machineState } from '@core/constants/machine.const';
-import { restDuration, restKind, WORK_DURATION } from '@core/constants/segment.const';
+import { restKind } from '@core/constants/segment.const';
 import type { TRestKind } from '@core/types/common.type';
 
 export function remainingMs(snapshot: TWorkSnapshot | TRestSnapshot, nowMs: number): number {
@@ -30,6 +30,6 @@ export function getActiveRangeEnd(snapshot: TSnapshot | null) {
 
 export function segmentDurationMs(snapshot: TWorkSnapshot | TRestSnapshot): number {
   return snapshot.state === machineState.WORK
-    ? WORK_DURATION * MS_PER_MINUTE
-    : restDuration[snapshot.restKind] * MS_PER_MINUTE;
+    ? snapshot.workDuration * MS_PER_MINUTE
+    : snapshot.restDuration[snapshot.restKind] * MS_PER_MINUTE;
 }

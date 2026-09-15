@@ -5,7 +5,7 @@ import { machineState } from '@core/constants/machine.const';
 import { rangeEnd, rangeStart } from '@testUtils/fixtures';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { MS_PER_MINUTE } from '@core/constants/common.const';
-import { restKind } from '@core/constants/segment.const';
+import { intervals, restKind } from '@core/constants/segment.const';
 
 describe('Тестирование selectors', () => {
   describe('Функция remainingMs', () => {
@@ -27,6 +27,7 @@ describe('Тестирование selectors', () => {
           rangeEnd,
           segmentStart: convertHoursToTimestamp(15),
           workSegmentCount: 2,
+          ...intervals,
         };
 
         expect(remainingMs(workSnapshot, nowMs)).toBe(expectedMs);
@@ -48,6 +49,7 @@ describe('Тестирование selectors', () => {
           restKind: restKind.LONG,
           segmentStart: convertHoursToTimestamp(15),
           workSegmentCount: 2,
+          ...intervals,
         };
 
         expect(remainingMs(restLongSnapshot, nowMs)).toBe(expectedMs);
@@ -69,6 +71,7 @@ describe('Тестирование selectors', () => {
           restKind: restKind.SHORT,
           segmentStart: convertHoursToTimestamp(15),
           workSegmentCount: 2,
+          ...intervals,
         };
 
         expect(remainingMs(restShortSnapshot, nowMs)).toBe(expectedMs);

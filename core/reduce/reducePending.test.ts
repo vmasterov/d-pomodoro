@@ -16,13 +16,14 @@ import type {
 } from '@core/types/events.type';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { rangeStart, rangeEnd, startTimestamp, endTimestamp } from '@testUtils/fixtures';
-import { restKind } from '@core/constants/segment.const';
+import { intervals, restKind } from '@core/constants/segment.const';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 const pendingSnapshot: TPendingSnapshot = {
   rangeStart,
   rangeEnd,
   state: machineState.PENDING,
+  ...intervals,
 };
 
 silenceConsoleWarn();
@@ -74,6 +75,7 @@ describe('Тестирование reducePending', () => {
         state: machineState.WORK,
         segmentStart: nowMs,
         workSegmentCount: 0,
+        ...intervals,
       };
 
       expect(reducePending(pendingSnapshot, workStartEvent, nowMs)).toEqual(workSnapshot);
@@ -117,6 +119,7 @@ describe('Тестирование reducePending', () => {
           type: eventType.SETUP_START,
           startTimestamp,
           endTimestamp,
+          ...intervals,
         },
       ],
       [
