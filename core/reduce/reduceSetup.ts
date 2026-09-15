@@ -27,6 +27,9 @@ export function reduceSetup(snapshot: TSetupSnapshot, event: TEvent, nowMs: numb
       state: machineState.PENDING,
       rangeStart,
       rangeEnd,
+      workDuration: event.workDuration,
+      alertWorkTime: event.alertWorkTime,
+      restDuration: event.restDuration,
     };
   }
 
@@ -36,5 +39,8 @@ export function reduceSetup(snapshot: TSetupSnapshot, event: TEvent, nowMs: numb
     rangeEnd,
     segmentStart: nowMs,
     workSegmentCount: 0,
+    workDuration: event.workDuration,
+    alertWorkTime: event.alertWorkTime,
+    restDuration: event.restDuration,
   };
 }

@@ -1,6 +1,6 @@
 import type { TSnapshot } from '@core/types/snapshot.type';
 import { machineState } from '@core/constants/machine.const';
-import { MS_PER_5_MINUTES } from '@core/constants/common.const';
+import { MS_PER_MINUTE } from '@core/constants/common.const';
 import type { TScheduleNotification } from '@notifications/notifications.type';
 import { getRangeEndNotification } from '@notifications/utils/getRangeEndNotification';
 import { segmentDurationMs } from '@core/selectors/selectors';
@@ -52,17 +52,14 @@ export function getNotificationsDataList(
         });
       }
 
-      const fiveMinutesNotificationWorkTimestamp =
-        segmentDurationMs(snapshot) + segmentStart - MS_PER_5_MINUTES;
+      const alertNotificationTimestamp =
+        segmentDurationMs(snapshot) + segmentStart - snapshot.alertWorkTime * MS_PER_MINUTE;
 
-      if (
-        fiveMinutesNotificationWorkTimestamp > nowMs &&
-        fiveMinutesNotificationWorkTimestamp < rangeEnd
-      ) {
+      if (alertNotificationTimestamp > nowMs && alertNotificationTimestamp < rangeEnd) {
         notifications.push({
           title: 'Скоро перерыв',
-          body: `Через 5 минут — время отвлечься от компьютера.`,
-          date: fiveMinutesNotificationWorkTimestamp,
+          body: `Количество минут до перерыва: ${snapshot.alertWorkTime}`,
+          date: alertNotificationTimestamp,
         });
       }
 

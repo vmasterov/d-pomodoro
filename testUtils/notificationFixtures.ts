@@ -2,6 +2,7 @@ import { rangeEnd, rangeStart } from '@testUtils/fixtures';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { convertDateToFormattedTime } from '@core/utils/date.util';
 import type { TScheduleNotification } from '@notifications/notifications.type';
+import { ALERT_WORK_TIME } from '@core/constants/segment.const';
 
 export const nowMsList = [
   convertHoursToTimestamp(8),
@@ -38,7 +39,7 @@ export const workEndNotification = (date: number): TScheduleNotification => ({
 
 export const workSoonNotification = (date: number): TScheduleNotification => ({
   title: 'Скоро перерыв',
-  body: `Через 5 минут — время отвлечься от компьютера.`,
+  body: `Количество минут до перерыва: ${ALERT_WORK_TIME}`,
   date,
 });
 

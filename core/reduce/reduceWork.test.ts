@@ -15,7 +15,7 @@ import type {
 import { eventType } from '@core/constants/events.const';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { reduceWork } from '@core/reduce/reduceWork';
-import { restKind } from '@core/constants/segment.const';
+import { intervals, restKind } from '@core/constants/segment.const';
 import { rangeStart, rangeEnd, startTimestamp, endTimestamp } from '@testUtils/fixtures';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
@@ -34,6 +34,7 @@ describe('Тестирование reduceWork', () => {
         rangeEnd,
         segmentStart: convertHoursToTimestamp(17),
         workSegmentCount: 0,
+        ...intervals,
       };
 
       const resetEvent: TResetEvent = {
@@ -59,6 +60,7 @@ describe('Тестирование reduceWork', () => {
         rangeEnd,
         segmentStart: convertHoursToTimestamp(17),
         workSegmentCount: 0,
+        ...intervals,
       };
 
       const rangeFinishEvent: TRangeFinishEvent = {
@@ -83,6 +85,7 @@ describe('Тестирование reduceWork', () => {
         rangeEnd,
         segmentStart: convertHoursToTimestamp(14),
         workSegmentCount: 0,
+        ...intervals,
       };
 
       const rangeFinishEvent: TRangeFinishEvent = {
@@ -104,6 +107,7 @@ describe('Тестирование reduceWork', () => {
         rangeEnd,
         segmentStart: convertHoursToTimestamp(17),
         workSegmentCount: 0,
+        ...intervals,
       };
 
       const restStartEvent: TRestStartEvent = {
@@ -123,6 +127,7 @@ describe('Тестирование reduceWork', () => {
         rangeEnd,
         segmentStart: convertHoursToTimestamp(14),
         workSegmentCount: 2,
+        ...intervals,
       };
 
       const restStartEvent: TRestStartEvent = {
@@ -137,6 +142,7 @@ describe('Тестирование reduceWork', () => {
         restKind: restKind.LONG,
         segmentStart: nowMs,
         workSegmentCount: 3,
+        ...intervals,
       };
 
       expect(reduceWork(workSnapshot, restStartEvent, nowMs)).toEqual(restSnapshot);
@@ -151,6 +157,7 @@ describe('Тестирование reduceWork', () => {
           type: eventType.SETUP_START,
           startTimestamp,
           endTimestamp,
+          ...intervals,
         },
       ],
       [
@@ -174,6 +181,7 @@ describe('Тестирование reduceWork', () => {
         rangeEnd,
         segmentStart: convertHoursToTimestamp(14),
         workSegmentCount: 2,
+        ...intervals,
       };
 
       expect(reduceWork(workSnapshot, event, nowMs)).toEqual(workSnapshot);

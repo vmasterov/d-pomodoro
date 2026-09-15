@@ -1,11 +1,9 @@
-import type { TRestKind } from '@core/types/common.type';
+import type { TRestKind, TSettings } from '@core/types/common.type';
 import { eventType } from '@core/constants/events.const';
 
 export type TSetupStartEvent = {
   type: typeof eventType.SETUP_START;
-  startTimestamp: number;
-  endTimestamp: number;
-};
+} & TSettings;
 
 export type TResetEvent = {
   type: typeof eventType.RESET;

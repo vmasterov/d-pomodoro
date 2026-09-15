@@ -16,7 +16,7 @@ import type {
 } from '@core/types/events.type';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { rangeStart, rangeEnd, startTimestamp, endTimestamp } from '@testUtils/fixtures';
-import { restKind } from '@core/constants/segment.const';
+import { intervals, restKind } from '@core/constants/segment.const';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 const restSnapshot: TRestSnapshot = {
@@ -26,6 +26,7 @@ const restSnapshot: TRestSnapshot = {
   restKind: restKind.LONG,
   segmentStart: convertHoursToTimestamp(14),
   workSegmentCount: 2,
+  ...intervals,
 };
 
 silenceConsoleWarn();
@@ -75,6 +76,7 @@ describe('Тестирование reduceRest', () => {
         rangeEnd,
         segmentStart: nowMs,
         workSegmentCount: 2,
+        ...intervals,
       };
 
       expect(reduceRest(restSnapshot, workStartEvent, nowMs)).toEqual(workSnapshot);
@@ -118,6 +120,7 @@ describe('Тестирование reduceRest', () => {
           type: eventType.SETUP_START,
           startTimestamp,
           endTimestamp,
+          ...intervals,
         },
       ],
       [

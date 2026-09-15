@@ -13,7 +13,7 @@ import {
   startTimestamp,
   endTimestamp,
 } from '@testUtils/fixtures';
-import { restKind } from '@core/constants/segment.const';
+import { intervals, restKind } from '@core/constants/segment.const';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 const setupSnapshot: TSetupSnapshot = {
@@ -24,6 +24,7 @@ const setupStartEvent: TSetupStartEvent = {
   type: eventType.SETUP_START,
   startTimestamp,
   endTimestamp,
+  ...intervals,
 };
 
 silenceConsoleWarn();
@@ -37,6 +38,7 @@ describe('Тестирование reduceSetup', () => {
         state: machineState.PENDING,
         rangeStart,
         rangeEnd,
+        ...intervals,
       };
 
       expect(reduceSetup(setupSnapshot, setupStartEvent, nowMs)).toEqual(pendingSnapshot);
@@ -52,6 +54,7 @@ describe('Тестирование reduceSetup', () => {
         rangeEnd,
         segmentStart: nowMs,
         workSegmentCount: 0,
+        ...intervals,
       };
 
       expect(reduceSetup(setupSnapshot, setupStartEvent, nowMs)).toEqual(workSnapshot);
@@ -65,6 +68,7 @@ describe('Тестирование reduceSetup', () => {
         state: machineState.PENDING,
         rangeStart: rangeStartTomorrow,
         rangeEnd: rangeEndTomorrow,
+        ...intervals,
       };
 
       expect(reduceSetup(setupSnapshot, setupStartEvent, nowMs)).toEqual(pendingSnapshot);

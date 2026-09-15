@@ -11,7 +11,7 @@ import { eventType } from '@core/constants/events.const';
 import { endTimestamp, rangeEnd, rangeStart, startTimestamp } from '@testUtils/fixtures';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 import { reduce } from '@core/reduce/index';
-import { restKind } from '@core/constants/segment.const';
+import { intervals, restKind } from '@core/constants/segment.const';
 import { silenceConsoleWarn } from '@testUtils/silenceConsoleWarn';
 
 vi.mock('./reduceSetup.ts', { spy: true });
@@ -53,6 +53,7 @@ const pendingSnapshot = {
   state: machineState.PENDING,
   rangeStart,
   rangeEnd,
+  ...intervals,
 };
 
 const workSnapshot = {
@@ -61,6 +62,7 @@ const workSnapshot = {
   rangeEnd,
   segmentStart: nowMs,
   workSegmentCount: 1,
+  ...intervals,
 };
 
 const restSnapshot = {
@@ -70,6 +72,7 @@ const restSnapshot = {
   restKind: restKind.LONG,
   segmentStart: nowMs,
   workSegmentCount: 1,
+  ...intervals,
 };
 
 const finishedSnapshot = {
@@ -82,6 +85,7 @@ const setupEvent = {
   type: eventType.SETUP_START,
   startTimestamp,
   endTimestamp,
+  ...intervals,
 };
 
 describe('Тестирование функции reduce', () => {

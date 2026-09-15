@@ -7,10 +7,15 @@ export type TRestDuration = Readonly<{
   short: number;
 }>;
 
-export type TSettings = Readonly<{
-  startTimestamp: number;
-  endTimestamp: number;
+export type TSegmentIntervals = {
   workDuration: number;
   alertWorkTime: number;
   restDuration: TRestDuration;
-}>;
+};
+
+export type TSettings = Readonly<
+  {
+    startTimestamp: number;
+    endTimestamp: number;
+  } & TSegmentIntervals
+>;

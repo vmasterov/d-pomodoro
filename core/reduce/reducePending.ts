@@ -31,6 +31,9 @@ export function reducePending(snapshot: TPendingSnapshot, event: TEvent, nowMs: 
         rangeEnd: snapshot.rangeEnd,
         segmentStart: nowMs,
         workSegmentCount: 0,
+        workDuration: snapshot.workDuration,
+        alertWorkTime: snapshot.alertWorkTime,
+        restDuration: snapshot.restDuration,
       };
   }
 

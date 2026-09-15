@@ -38,8 +38,10 @@ export function Setup({ setupStart }: TSetupProps) {
       return;
     }
 
-    setupStart(startTimestamp, endTimestamp);
-    void saveSettings({ startTimestamp, endTimestamp, ...initialIntervals });
+    const settings = { startTimestamp, endTimestamp, ...initialIntervals };
+
+    setupStart(settings);
+    void saveSettings(settings);
   };
 
   const initTimeStates = async () => {
