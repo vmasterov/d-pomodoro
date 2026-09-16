@@ -6,11 +6,12 @@ import { buttonVariant } from '@/constants/component.const';
 import { useEffect, useState } from 'react';
 import { loadSettings, saveSettings } from '@storage/index';
 import type { TTimeRange } from '@/types/components/timeRange.type';
-import { intervals } from '@core/constants/segment.const';
+import { intervals as initialIntervals } from '@core/constants/segment.const';
 import type { TIntervals } from '@core/types/validators.type';
+import { SettingsModal } from '@/components/SettingsModal';
 
 export function Setup({ setupStart }: TSetupProps) {
-  const [initialIntervals, setInitialIntervals] = useState<TIntervals>(intervals);
+  const [intervals, setIntervals] = useState<TIntervals>(initialIntervals);
   const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
   const [endTimestamp, setEndTimestamp] = useState<number | null>(null);
 
@@ -44,14 +45,14 @@ export function Setup({ setupStart }: TSetupProps) {
     void saveSettings(settings);
   };
 
-  const initTimeStates = async () => {
+  const initSettings = async () => {
     const settings = await loadSettings();
 
     if (settings) {
       setStartTimestamp(settings.startTimestamp);
       setEndTimestamp(settings.endTimestamp);
 
-      setInitialIntervals({
+      setIntervals({
         workDuration: settings.workDuration,
         alertWorkTime: settings.alertWorkTime,
         restDuration: settings.restDuration,
@@ -59,8 +60,18 @@ export function Setup({ setupStart }: TSetupProps) {
     }
   };
 
+  const [isSettingsModalVisible, setIsSettingsModalVisible] = useState<boolean>(false);
+
+  const settingsModalCloseHandler = () => {
+    setIsSettingsModalVisible(false);
+  };
+
+  const openSettingsModal = () => {
+    setIsSettingsModalVisible(true);
+  };
+
   useEffect(() => {
-    void initTimeStates();
+    void initSettings();
   }, []);
 
   return (
@@ -68,17 +79,29 @@ export function Setup({ setupStart }: TSetupProps) {
       title="Рабочий диапазон"
       subtitle="Когда сегодня начинается и&nbsp;заканчивается работа"
       content={
-        <TimeRange
-          startDate={startDate}
-          endDate={endDate}
-          updateRangeField={updateRangeFieldHandler}
-          errors={{ endDateErrorText: endError }}
-        />
+        <>
+          <TimeRange
+            startDate={startDate}
+            endDate={endDate}
+            updateRangeField={updateRangeFieldHandler}
+            errors={{ endDateErrorText: endError }}
+          />
+          <SettingsModal
+            visible={isSettingsModalVisible}
+            onClose={settingsModalCloseHandler}
+            intervals={intervals}
+          />
+        </>
       }
       controls={
-        <Button onPress={onPressHandler} variant={buttonVariant.ACCENT} disabled={isDisabled}>
-          Старт
-        </Button>
+        <>
+          <Button onPress={onPressHandler} variant={buttonVariant.ACCENT} disabled={isDisabled}>
+            Старт
+          </Button>
+          <Button onPress={openSettingsModal} variant={buttonVariant.DEFAULT}>
+            Настройки
+          </Button>
+        </>
       }
     />
   );
