@@ -1,49 +1,58 @@
-import type { TSegmentIntervals } from '@core/types/common.type';
+import type { TPossibleEmptySegmentIntervals } from '@core/types/common.type';
 
-export type TRule = (intervals: TIntervals) => boolean;
+export type TValueRule = (value: number) => boolean;
+export type TCrossRule = (intervals: TPossibleEmptySegmentIntervals) => boolean;
 
-export type TWorkDurationRules = {
-  isFilled: TRule;
-  isInteger: TRule;
-  isGreaterThanZero: TRule;
-  isLessThanOrEqualLimit: TRule;
-  isGreaterThanAlert: TRule;
+export type TWorkDurationValueRules = {
+  isInteger: TValueRule;
+  isGreaterThanZero: TValueRule;
+  isLessThanOrEqualLimit: TValueRule;
 };
 
-export type TAlertWorkTimeRules = {
-  isFilled: TRule;
-  isInteger: TRule;
-  isValidValue: TRule;
+export type TWorkDurationCrossRules = {
+  isGreaterThanAlert: TCrossRule;
 };
 
-export type TRestLongRules = {
-  isFilled: TRule;
-  isInteger: TRule;
-  isGreaterThanZero: TRule;
-  isLessThanOrEqualLimit: TRule;
-  isGreaterThanRestSmall: TRule;
+export type TAlertWorkTimeValueRules = {
+  isInteger: TValueRule;
+  isGreaterThanZero: TValueRule;
 };
 
-export type TRestShortRules = {
-  isFilled: TRule;
-  isInteger: TRule;
-  isGreaterThanZero: TRule;
-  isLessThanOrEqualLimit: TRule;
-  isLessThanRestLong: TRule;
+export type TAlertWorkTimeCrossRules = {
+  isLessThanWorkDuration: TCrossRule;
+};
+
+export type TRestLongValueRules = {
+  isInteger: TValueRule;
+  isGreaterThanZero: TValueRule;
+  isLessThanOrEqualLimit: TValueRule;
+};
+
+export type TRestLongCrossRules = {
+  isGreaterThanRestSmall: TCrossRule;
+};
+
+export type TRestShortValueRules = {
+  isInteger: TValueRule;
+  isGreaterThanZero: TValueRule;
+  isLessThanOrEqualLimit: TValueRule;
+};
+
+export type TRestShortCrossRules = {
+  isLessThanRestLong: TCrossRule;
 };
 
 export type TErrors<Rules> = { [Rule in keyof Rules]: string };
 
-export type TValidator<Validator> = {
-  rules: Validator;
-  errors: TErrors<Validator>;
+export type TValidator<Value, Cross> = {
+  valueRules: Value;
+  crossRules: Cross;
+  errors: TErrors<Value & Cross>;
 };
 
 export type TValidators = {
-  workDuration: TValidator<TWorkDurationRules>;
-  alertWorkTime: TValidator<TAlertWorkTimeRules>;
-  restLong: TValidator<TRestLongRules>;
-  restShort: TValidator<TRestShortRules>;
+  workDuration: TValidator<TWorkDurationValueRules, TWorkDurationCrossRules>;
+  alertWorkTime: TValidator<TAlertWorkTimeValueRules, TAlertWorkTimeCrossRules>;
+  restLong: TValidator<TRestLongValueRules, TRestLongCrossRules>;
+  restShort: TValidator<TRestShortValueRules, TRestShortCrossRules>;
 };
-
-export type TIntervals = Readonly<TSegmentIntervals>;

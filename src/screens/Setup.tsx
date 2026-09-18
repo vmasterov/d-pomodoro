@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
 import { loadSettings, saveSettings } from '@storage/index';
 import type { TTimeRange } from '@/types/components/timeRange.type';
 import { intervals as initialIntervals } from '@core/constants/segment.const';
-import type { TIntervals } from '@core/types/validators.type';
 import { SettingsModal } from '@/components/SettingsModal';
+import type { TSegmentIntervals } from '@core/types/common.type';
 
 export function Setup({ setupStart }: TSetupProps) {
-  const [intervals, setIntervals] = useState<TIntervals>(initialIntervals);
+  const [intervals, setIntervals] = useState<TSegmentIntervals>(initialIntervals);
   const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
   const [endTimestamp, setEndTimestamp] = useState<number | null>(null);
 
@@ -39,7 +39,7 @@ export function Setup({ setupStart }: TSetupProps) {
       return;
     }
 
-    const settings = { startTimestamp, endTimestamp, ...initialIntervals };
+    const settings = { startTimestamp, endTimestamp, ...intervals };
 
     setupStart(settings);
     void saveSettings(settings);
@@ -49,13 +49,17 @@ export function Setup({ setupStart }: TSetupProps) {
     const settings = await loadSettings();
 
     if (settings) {
-      setStartTimestamp(settings.startTimestamp);
-      setEndTimestamp(settings.endTimestamp);
+      const { startTimestamp, endTimestamp, workDuration, alertWorkTime, restShort, restLong } =
+        settings;
+
+      setStartTimestamp(startTimestamp);
+      setEndTimestamp(endTimestamp);
 
       setIntervals({
-        workDuration: settings.workDuration,
-        alertWorkTime: settings.alertWorkTime,
-        restDuration: settings.restDuration,
+        workDuration,
+        alertWorkTime,
+        restShort,
+        restLong,
       });
     }
   };
@@ -86,11 +90,9 @@ export function Setup({ setupStart }: TSetupProps) {
             updateRangeField={updateRangeFieldHandler}
             errors={{ endDateErrorText: endError }}
           />
-          <SettingsModal
-            visible={isSettingsModalVisible}
-            onClose={settingsModalCloseHandler}
-            intervals={intervals}
-          />
+          {isSettingsModalVisible && (
+            <SettingsModal onClose={settingsModalCloseHandler} initIntervals={intervals} />
+          )}
         </>
       }
       controls={

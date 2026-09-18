@@ -1,26 +1,32 @@
-import type { TErrors, TIntervals, TRule, TValidators } from '@core/types/validators.type';
+import type { TCrossRule, TValidator, TValidators, TValueRule } from '@core/types/validators.type';
 import { LIMIT } from '@core/constants/segment.const';
+import type { TPossibleEmptySegmentIntervals } from '@core/types/common.type';
 
-const isGreaterThanRestSmall = (intervals: TIntervals) =>
-  intervals.restDuration.long > intervals.restDuration.short;
+const isGreaterThanRestSmall = (intervals: TPossibleEmptySegmentIntervals) => {
+  if (intervals.restLong !== null && intervals.restShort !== null) {
+    return intervals.restLong > intervals.restShort;
+  }
+
+  return true;
+};
 
 const validators: TValidators = {
   workDuration: {
-    rules: {
-      isFilled: (intervals: TIntervals) => Number.isFinite(intervals.workDuration),
-      isInteger: (intervals: TIntervals) => Number.isInteger(intervals.workDuration),
-      isGreaterThanZero: (intervals: TIntervals) => intervals.workDuration > 0,
-      isLessThanOrEqualLimit: (intervals: TIntervals) => intervals.workDuration <= LIMIT,
-      isGreaterThanAlert: (intervals: TIntervals) => {
-        if (!Number.isFinite(intervals.alertWorkTime)) {
-          return true;
+    valueRules: {
+      isInteger: (workDuration: number) => Number.isInteger(workDuration),
+      isGreaterThanZero: (workDuration: number) => workDuration > 0,
+      isLessThanOrEqualLimit: (workDuration: number) => workDuration <= LIMIT,
+    },
+    crossRules: {
+      isGreaterThanAlert: (intervals: TPossibleEmptySegmentIntervals) => {
+        if (intervals.workDuration !== null && intervals.alertWorkTime !== null) {
+          return intervals.workDuration > intervals.alertWorkTime;
         }
 
-        return intervals.workDuration > intervals.alertWorkTime;
+        return true;
       },
     },
     errors: {
-      isFilled: 'Поле обязательно для заполнения',
       isInteger: 'Значение должно быть целочисленным',
       isGreaterThanZero: 'Значение должно быть больше 0',
       isLessThanOrEqualLimit: `Значение не должно превышать ${LIMIT}`,
@@ -28,39 +34,37 @@ const validators: TValidators = {
     },
   },
   alertWorkTime: {
-    rules: {
-      isFilled: (intervals: TIntervals) => Number.isFinite(intervals.alertWorkTime),
-      isInteger: (intervals: TIntervals) => Number.isInteger(intervals.alertWorkTime),
-      isValidValue: (intervals: TIntervals) => {
-        if (!Number.isFinite(intervals.workDuration)) {
-          return true;
+    valueRules: {
+      isInteger: (alertWorkTime: number) => Number.isInteger(alertWorkTime),
+      isGreaterThanZero: (alertWorkTime: number) => 0 < alertWorkTime,
+    },
+    crossRules: {
+      isLessThanWorkDuration: (intervals: TPossibleEmptySegmentIntervals) => {
+        if (intervals.workDuration !== null && intervals.alertWorkTime !== null) {
+          return intervals.alertWorkTime <= intervals.workDuration - 1;
         }
 
-        return 0 < intervals.alertWorkTime && intervals.alertWorkTime <= intervals.workDuration - 1;
+        return true;
       },
     },
     errors: {
-      isFilled: 'Поле обязательно для заполнения',
       isInteger: 'Значение должно быть целочисленным',
-      isValidValue: 'Значение должно быть больше 0 и меньше длительности рабочего диапазона',
+      isGreaterThanZero: 'Значение должно быть больше 0',
+      isLessThanWorkDuration: 'Значение должно быть меньше длительности рабочего сегмента',
     },
   },
   restLong: {
-    rules: {
-      isFilled: (intervals: TIntervals) => Number.isFinite(intervals.restDuration.long),
-      isInteger: (intervals: TIntervals) => Number.isInteger(intervals.restDuration.long),
-      isGreaterThanZero: (intervals: TIntervals) => intervals.restDuration.long > 0,
-      isLessThanOrEqualLimit: (intervals: TIntervals) => intervals.restDuration.long <= LIMIT,
-      isGreaterThanRestSmall: (intervals: TIntervals) => {
-        if (!Number.isFinite(intervals.restDuration.short)) {
-          return true;
-        }
-
+    valueRules: {
+      isInteger: (restLong: number) => Number.isInteger(restLong),
+      isGreaterThanZero: (restLong: number) => restLong > 0,
+      isLessThanOrEqualLimit: (restLong: number) => restLong <= LIMIT,
+    },
+    crossRules: {
+      isGreaterThanRestSmall: (intervals: TPossibleEmptySegmentIntervals) => {
         return isGreaterThanRestSmall(intervals);
       },
     },
     errors: {
-      isFilled: 'Поле обязательно для заполнения',
       isInteger: 'Значение должно быть целочисленным',
       isGreaterThanZero: 'Значение должно быть больше 0',
       isLessThanOrEqualLimit: `Значение не должно превышать ${LIMIT}`,
@@ -68,21 +72,17 @@ const validators: TValidators = {
     },
   },
   restShort: {
-    rules: {
-      isFilled: (intervals: TIntervals) => Number.isFinite(intervals.restDuration.short),
-      isInteger: (intervals: TIntervals) => Number.isInteger(intervals.restDuration.short),
-      isGreaterThanZero: (intervals: TIntervals) => intervals.restDuration.short > 0,
-      isLessThanOrEqualLimit: (intervals: TIntervals) => intervals.restDuration.short <= LIMIT,
-      isLessThanRestLong: (intervals: TIntervals) => {
-        if (!Number.isFinite(intervals.restDuration.long)) {
-          return true;
-        }
-
+    valueRules: {
+      isInteger: (restShort: number) => Number.isInteger(restShort),
+      isGreaterThanZero: (restShort: number) => restShort > 0,
+      isLessThanOrEqualLimit: (restShort: number) => restShort <= LIMIT,
+    },
+    crossRules: {
+      isLessThanRestLong: (intervals: TPossibleEmptySegmentIntervals) => {
         return isGreaterThanRestSmall(intervals);
       },
     },
     errors: {
-      isFilled: 'Поле обязательно для заполнения',
       isInteger: 'Значение должно быть целочисленным',
       isGreaterThanZero: 'Значение должно быть больше 0',
       isLessThanOrEqualLimit: `Значение не должно превышать ${LIMIT}`,
@@ -91,19 +91,40 @@ const validators: TValidators = {
   },
 };
 
-export function validateIntervals(intervals: TIntervals) {
-  const validateField = <T extends Record<string, TRule>>(rules: T, errors: TErrors<T>) => {
-    for (const rule in rules) {
-      if (!rules[rule](intervals)) {
-        return errors[rule];
-      }
-    }
-  };
+const validateField = <
+  Value extends Record<string, TValueRule>,
+  Cross extends Record<string, TCrossRule>,
+>(
+  intervals: TPossibleEmptySegmentIntervals,
+  value: number | null,
+  validator: TValidator<Value, Cross>,
+) => {
+  if (value === null) {
+    return 'Поле обязательно для заполнения';
+  }
 
+  const { valueRules, crossRules, errors } = validator;
+
+  for (const rule in valueRules) {
+    if (!valueRules[rule](value)) {
+      return errors[rule];
+    }
+  }
+
+  for (const rule in crossRules) {
+    if (!crossRules[rule](intervals)) {
+      return errors[rule];
+    }
+  }
+
+  return null;
+};
+
+export function validateIntervals(intervals: TPossibleEmptySegmentIntervals) {
   return {
-    workDuration: validateField(validators.workDuration.rules, validators.workDuration.errors),
-    alertWorkTime: validateField(validators.alertWorkTime.rules, validators.alertWorkTime.errors),
-    restLong: validateField(validators.restLong.rules, validators.restLong.errors),
-    restShort: validateField(validators.restShort.rules, validators.restShort.errors),
+    workDuration: validateField(intervals, intervals.workDuration, validators.workDuration),
+    alertWorkTime: validateField(intervals, intervals.alertWorkTime, validators.alertWorkTime),
+    restLong: validateField(intervals, intervals.restLong, validators.restLong),
+    restShort: validateField(intervals, intervals.restShort, validators.restShort),
   };
 }

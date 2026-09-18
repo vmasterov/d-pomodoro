@@ -7,8 +7,7 @@ import { theme } from '@/constants/theme.const';
 import { Fragment } from 'react';
 import { getWorkRestData } from '@/utils/getWorkRestData';
 import { WorkRestClock } from '@/components/WorkRestClock';
-import type { TRestKind } from '@core/types/common.type';
-import { restDuration } from '@core/constants/segment.const';
+import { restDurationMin } from '@core/selectors/selectors';
 
 export function Work({ restStart, reset, nowMs, snapshot }: TWorkProps) {
   const {
@@ -20,10 +19,6 @@ export function Work({ restStart, reset, nowMs, snapshot }: TWorkProps) {
     restInfoText,
     isMoreHourDowntime,
   } = getWorkRestData(snapshot, nowMs);
-
-  const getRestButtonText = (kind: TRestKind) => {
-    return `Отдых ${restDuration[kind]} мин`;
-  };
 
   return (
     <Layout
@@ -41,11 +36,11 @@ export function Work({ restStart, reset, nowMs, snapshot }: TWorkProps) {
           <Text style={styles.label}>{recommendedRestText}</Text>
 
           <Button onPress={() => restStart(primaryKind)} variant={buttonVariant.ACCENT}>
-            {getRestButtonText(primaryKind)}
+            {`Отдых ${restDurationMin(snapshot, primaryKind)} мин`}
           </Button>
 
           <Button onPress={() => restStart(secondaryKind)} variant={buttonVariant.DEFAULT}>
-            {getRestButtonText(secondaryKind)}
+            {`Отдых ${restDurationMin(snapshot, secondaryKind)} мин`}
           </Button>
 
           <Button onPress={reset} variant={buttonVariant.DANGER}>

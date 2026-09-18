@@ -29,7 +29,8 @@ export function reduceSetup(snapshot: TSetupSnapshot, event: TEvent, nowMs: numb
       rangeEnd,
       workDuration: event.workDuration,
       alertWorkTime: event.alertWorkTime,
-      restDuration: event.restDuration,
+      restShort: event.restShort,
+      restLong: event.restLong,
     };
   }
 
@@ -41,6 +42,7 @@ export function reduceSetup(snapshot: TSetupSnapshot, event: TEvent, nowMs: numb
     workSegmentCount: 0,
     workDuration: event.workDuration,
     alertWorkTime: event.alertWorkTime,
-    restDuration: event.restDuration,
+    restShort: event.restShort,
+    restLong: event.restLong,
   };
 }
