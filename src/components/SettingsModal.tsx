@@ -11,48 +11,49 @@ import { Button } from '@/components/Button';
 import { theme } from '@/constants/theme.const';
 import { validateIntervals } from '@core/utils/validateIntervals';
 import { useState } from 'react';
-import type { TSegmentIntervals } from '@core/types/common.type';
 import { buttonVariant } from '@/constants/component.const';
+import type { TPossibleEmptySegmentIntervals } from '@core/types/common.type';
 
 export type TSettingsModalProps = {
-  visible: boolean;
   onClose: () => void;
-  intervals: TSegmentIntervals;
+  initIntervals: TPossibleEmptySegmentIntervals;
 };
 
-export function SettingsModal({ visible, onClose, intervals }: TSettingsModalProps) {
-  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
-  const [int, setInt] = useState<TSegmentIntervals>(intervals);
+export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
+  const [errors, setErrors] = useState<Record<keyof TPossibleEmptySegmentIntervals, string | null>>(
+    {
+      workDuration: null,
+      alertWorkTime: null,
+      restShort: null,
+      restLong: null,
+    },
+  );
+  const [intervals, setIntervals] = useState<TPossibleEmptySegmentIntervals>(initIntervals);
 
-  const changeValueHandler = (value: string, name: string) => {
-    let newInt = {
-      ...int,
-      [name]: value ? Number(value) : '',
+  const changeValueHandler = (value: string, name: keyof TPossibleEmptySegmentIntervals) => {
+    const stringValue = value.replace(/\D+/g, '');
+    const numberValue = stringValue === '' ? null : Number(stringValue);
+
+    const newIntervals = {
+      ...intervals,
+      [name]: numberValue,
     };
 
-    if (name === 'short' || name === 'long') {
-      newInt = {
-        ...int,
-        restDuration: {
-          ...int.restDuration,
-          [name]: value ? Number(value) : '',
-        },
-      };
-    }
-
-    setInt(newInt);
-    setErrors(validateIntervals(newInt));
+    setIntervals(newIntervals);
+    setErrors(validateIntervals(newIntervals));
   };
 
   const requestCloseHandler = () => {
-    setInt(intervals);
     onClose();
+  };
+
+  const convertValueToString = (value: number | null): string => {
+    return Number.isFinite(value) ? String(value) : '';
   };
 
   return (
     <Modal
       animationType="slide"
-      visible={visible}
       onRequestClose={requestCloseHandler}
       style={styles.modal}
       transparent={true}
@@ -70,7 +71,7 @@ export function SettingsModal({ visible, onClose, intervals }: TSettingsModalPro
               <TextInput
                 style={styles.textInput}
                 onChangeText={(value) => changeValueHandler(value, 'workDuration')}
-                value={String(int.workDuration)}
+                value={convertValueToString(intervals.workDuration)}
                 placeholder="useless placeholder"
                 keyboardType="number-pad"
               />
@@ -80,7 +81,7 @@ export function SettingsModal({ visible, onClose, intervals }: TSettingsModalPro
               <TextInput
                 style={styles.textInput}
                 onChangeText={(value) => changeValueHandler(value, 'alertWorkTime')}
-                value={String(int.alertWorkTime)}
+                value={String(intervals.alertWorkTime)}
                 placeholder="useless placeholder"
                 keyboardType="number-pad"
               />
@@ -89,8 +90,8 @@ export function SettingsModal({ visible, onClose, intervals }: TSettingsModalPro
               <Text>Продолжительность короткого сегмента отдыха</Text>
               <TextInput
                 style={styles.textInput}
-                onChangeText={(value) => changeValueHandler(value, 'short')}
-                value={String(int.restDuration.short)}
+                onChangeText={(value) => changeValueHandler(value, 'restShort')}
+                value={String(intervals.restShort)}
                 placeholder="useless placeholder"
                 keyboardType="number-pad"
               />
@@ -99,8 +100,8 @@ export function SettingsModal({ visible, onClose, intervals }: TSettingsModalPro
               <Text>Продолжительность длинного сегмента отдыха</Text>
               <TextInput
                 style={styles.textInput}
-                onChangeText={(value) => changeValueHandler(value, 'long')}
-                value={String(int.restDuration.long)}
+                onChangeText={(value) => changeValueHandler(value, 'restLong')}
+                value={String(intervals.restLong)}
                 placeholder="useless placeholder"
                 keyboardType="number-pad"
               />

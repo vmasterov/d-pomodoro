@@ -34,7 +34,8 @@ export function reduceWork(snapshot: TWorkSnapshot, event: TEvent, nowMs: number
         workSegmentCount: snapshot.workSegmentCount + 1,
         workDuration: snapshot.workDuration,
         alertWorkTime: snapshot.alertWorkTime,
-        restDuration: snapshot.restDuration,
+        restShort: snapshot.restShort,
+        restLong: snapshot.restLong,
       };
   }
 

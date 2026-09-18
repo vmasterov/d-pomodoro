@@ -28,8 +28,16 @@ export function getActiveRangeEnd(snapshot: TSnapshot | null) {
   return snapshot.rangeEnd;
 }
 
+export function restDurationMin(snapshot: TWorkSnapshot | TRestSnapshot, kind: TRestKind) {
+  const { restLong, restShort } = snapshot;
+  return kind === restKind.LONG ? restLong : restShort;
+}
+
 export function segmentDurationMs(snapshot: TWorkSnapshot | TRestSnapshot): number {
-  return snapshot.state === machineState.WORK
-    ? snapshot.workDuration * MS_PER_MINUTE
-    : snapshot.restDuration[snapshot.restKind] * MS_PER_MINUTE;
+  const durationMin =
+    snapshot.state === machineState.WORK
+      ? snapshot.workDuration
+      : restDurationMin(snapshot, snapshot.restKind);
+
+  return durationMin * MS_PER_MINUTE;
 }

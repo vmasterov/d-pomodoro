@@ -7,15 +7,14 @@ export const WORK_DURATION = 30 as const;
 
 export const ALERT_WORK_TIME = 5 as const;
 
-export const restDuration = Object.freeze({
-  long: 8,
-  short: 5,
-});
+export const REST_DURATION_SHORT = 5 as const;
+export const REST_DURATION_LONG = 8 as const;
 
 export const intervals = Object.freeze({
   workDuration: WORK_DURATION,
   alertWorkTime: ALERT_WORK_TIME,
-  restDuration,
+  restShort: REST_DURATION_SHORT,
+  restLong: REST_DURATION_LONG,
 });
 
 export const LIMIT = 240 as const;

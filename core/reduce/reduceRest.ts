@@ -33,7 +33,8 @@ export function reduceRest(snapshot: TRestSnapshot, event: TEvent, nowMs: number
         workSegmentCount: snapshot.workSegmentCount,
         workDuration: snapshot.workDuration,
         alertWorkTime: snapshot.alertWorkTime,
-        restDuration: snapshot.restDuration,
+        restShort: snapshot.restShort,
+        restLong: snapshot.restLong,
       };
   }
 
