@@ -1,18 +1,11 @@
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { Modal, StyleSheet, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Button } from '@/components/Button';
 import { theme } from '@/constants/theme.const';
 import { validateIntervals } from '@core/utils/validateIntervals';
 import { useState } from 'react';
 import { buttonVariant } from '@/constants/component.const';
 import type { TPossibleEmptySegmentIntervals } from '@core/types/common.type';
+import { InputField } from '@/components/InputField';
 
 export type TSettingsModalProps = {
   onClose: () => void;
@@ -20,14 +13,6 @@ export type TSettingsModalProps = {
 };
 
 export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
-  const [errors, setErrors] = useState<Record<keyof TPossibleEmptySegmentIntervals, string | null>>(
-    {
-      workDuration: null,
-      alertWorkTime: null,
-      restShort: null,
-      restLong: null,
-    },
-  );
   const [intervals, setIntervals] = useState<TPossibleEmptySegmentIntervals>(initIntervals);
 
   const changeValueHandler = (value: string, name: keyof TPossibleEmptySegmentIntervals) => {
@@ -40,16 +25,13 @@ export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
     };
 
     setIntervals(newIntervals);
-    setErrors(validateIntervals(newIntervals));
   };
 
   const requestCloseHandler = () => {
     onClose();
   };
 
-  const convertValueToString = (value: number | null): string => {
-    return Number.isFinite(value) ? String(value) : '';
-  };
+  const errors = validateIntervals(intervals);
 
   return (
     <Modal
@@ -65,47 +47,38 @@ export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
         <View style={styles.test}>
           <View style={styles.content}>
             <Text style={styles.title}>Настройки</Text>
-
             <View>
-              <Text>Продолжительность рабочего сегмента</Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={(value) => changeValueHandler(value, 'workDuration')}
-                value={convertValueToString(intervals.workDuration)}
-                placeholder="useless placeholder"
-                keyboardType="number-pad"
+              <InputField
+                onChangeText={changeValueHandler}
+                name={'workDuration'}
+                value={intervals.workDuration}
+                label="Продолжительность рабочего сегмента"
+                error={errors.workDuration}
               />
-              <Text>{errors.workDuration}</Text>
 
-              <Text>Уведомление перед отдыхом</Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={(value) => changeValueHandler(value, 'alertWorkTime')}
-                value={String(intervals.alertWorkTime)}
-                placeholder="useless placeholder"
-                keyboardType="number-pad"
+              <InputField
+                onChangeText={changeValueHandler}
+                name={'alertWorkTime'}
+                value={intervals.alertWorkTime}
+                label="Уведомление перед отдыхом"
+                error={errors.alertWorkTime}
               />
-              <Text>{errors.alertWorkTime}</Text>
 
-              <Text>Продолжительность короткого сегмента отдыха</Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={(value) => changeValueHandler(value, 'restShort')}
-                value={String(intervals.restShort)}
-                placeholder="useless placeholder"
-                keyboardType="number-pad"
+              <InputField
+                onChangeText={changeValueHandler}
+                name={'restShort'}
+                value={intervals.restShort}
+                label="Продолжительность короткого сегмента отдыха"
+                error={errors.restShort}
               />
-              <Text>{errors.restShort}</Text>
 
-              <Text>Продолжительность длинного сегмента отдыха</Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={(value) => changeValueHandler(value, 'restLong')}
-                value={String(intervals.restLong)}
-                placeholder="useless placeholder"
-                keyboardType="number-pad"
+              <InputField
+                onChangeText={changeValueHandler}
+                name={'restLong'}
+                value={intervals.restLong}
+                label="Продолжительность длинного сегмента отдыха"
+                error={errors.restLong}
               />
-              <Text>{errors.restLong}</Text>
             </View>
           </View>
           <View style={styles.footer}>
