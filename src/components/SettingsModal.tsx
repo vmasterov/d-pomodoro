@@ -6,13 +6,10 @@ import { useState } from 'react';
 import { buttonVariant } from '@/constants/component.const';
 import type { TPossibleEmptySegmentIntervals } from '@core/types/common.type';
 import { InputField } from '@/components/InputField';
+import type { TSettingsModalProps } from '@/types/components/settingsModal.type';
+import { checkIsIntervalHasErrors } from '@core/utils/checkIsIntervalHasErrors';
 
-export type TSettingsModalProps = {
-  onClose: () => void;
-  initIntervals: TPossibleEmptySegmentIntervals;
-};
-
-export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
+export function SettingsModal({ onClose, onSave, initIntervals }: TSettingsModalProps) {
   const [intervals, setIntervals] = useState<TPossibleEmptySegmentIntervals>(initIntervals);
 
   const changeValueHandler = (value: string, name: keyof TPossibleEmptySegmentIntervals) => {
@@ -31,20 +28,36 @@ export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
     onClose();
   };
 
-  const errors = validateIntervals(intervals);
+  const pressSaveButtonHandler = () => {
+    const { workDuration, alertWorkTime, restShort, restLong } = intervals;
+
+    if (
+      !isIntervalErrors &&
+      workDuration !== null &&
+      alertWorkTime !== null &&
+      restShort !== null &&
+      restLong !== null
+    ) {
+      onSave({
+        workDuration,
+        alertWorkTime,
+        restLong,
+        restShort,
+      });
+      onClose();
+    }
+  };
+
+  const possibleEmptyErrors = validateIntervals(intervals);
+  const isIntervalErrors = checkIsIntervalHasErrors(possibleEmptyErrors);
 
   return (
-    <Modal
-      animationType="slide"
-      onRequestClose={requestCloseHandler}
-      style={styles.modal}
-      transparent={true}
-    >
+    <Modal animationType="slide" onRequestClose={requestCloseHandler} transparent={true}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
       >
-        <View style={styles.test}>
+        <View style={styles.fieldsWrapper}>
           <View style={styles.content}>
             <Text style={styles.title}>Настройки</Text>
             <View>
@@ -53,7 +66,7 @@ export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
                 name={'workDuration'}
                 value={intervals.workDuration}
                 label="Продолжительность рабочего сегмента"
-                error={errors.workDuration}
+                error={possibleEmptyErrors.workDuration}
               />
 
               <InputField
@@ -61,7 +74,7 @@ export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
                 name={'alertWorkTime'}
                 value={intervals.alertWorkTime}
                 label="Уведомление перед отдыхом"
-                error={errors.alertWorkTime}
+                error={possibleEmptyErrors.alertWorkTime}
               />
 
               <InputField
@@ -69,7 +82,7 @@ export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
                 name={'restShort'}
                 value={intervals.restShort}
                 label="Продолжительность короткого сегмента отдыха"
-                error={errors.restShort}
+                error={possibleEmptyErrors.restShort}
               />
 
               <InputField
@@ -77,12 +90,16 @@ export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
                 name={'restLong'}
                 value={intervals.restLong}
                 label="Продолжительность длинного сегмента отдыха"
-                error={errors.restLong}
+                error={possibleEmptyErrors.restLong}
               />
             </View>
           </View>
           <View style={styles.footer}>
-            <Button onPress={() => {}} variant={buttonVariant.ACCENT}>
+            <Button
+              onPress={pressSaveButtonHandler}
+              variant={buttonVariant.ACCENT}
+              disabled={isIntervalErrors}
+            >
               Сохранить
             </Button>
             <Button onPress={requestCloseHandler}>Закрыть</Button>
@@ -94,17 +111,16 @@ export function SettingsModal({ onClose, initIntervals }: TSettingsModalProps) {
 }
 
 const styles = StyleSheet.create({
-  modal: {},
   container: {
     flex: 1,
   },
-  test: {
+  fieldsWrapper: {
     backgroundColor: theme.color.screenBg,
     marginTop: 48,
     marginRight: 16,
     marginBottom: 16,
     marginLeft: 16,
-    borderRadius: 28, // придумать дизайн
+    borderRadius: 28,
     flex: 1,
     padding: 18,
     shadowColor: theme.color.primaryText,
@@ -125,11 +141,5 @@ const styles = StyleSheet.create({
     color: theme.color.primaryText,
     marginVertical: theme.spacing.gap.s,
     textAlign: 'center',
-  },
-  textInput: {
-    color: theme.color.primaryText,
-    borderColor: theme.color.mutedText,
-    borderRadius: theme.spacing.radius.field,
-    borderWidth: 1,
   },
 });

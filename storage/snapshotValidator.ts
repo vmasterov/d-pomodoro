@@ -1,7 +1,8 @@
 import type { TSnapshot } from '@core/types/snapshot.type';
 import { machineState } from '@core/constants/machine.const';
-import { getNumberFieldValue } from './utils/getNumberFieldValue';
-import { getRestKind } from './utils/getRestKind';
+import { getNumberFieldValue } from '@storage/utils/getNumberFieldValue';
+import { getRestKind } from '@storage/utils/getRestKind';
+import { getIntervals } from '@storage/utils/getIntervals';
 
 export function snapshotValidator(value: unknown): TSnapshot | null {
   if (value !== null && typeof value === 'object' && !Array.isArray(value) && 'state' in value) {
@@ -15,7 +16,9 @@ export function snapshotValidator(value: unknown): TSnapshot | null {
         const rangeStart = getNumberFieldValue(value, 'rangeStart');
         const rangeEnd = getNumberFieldValue(value, 'rangeEnd');
 
-        if (rangeStart === null || rangeEnd === null) {
+        const intervals = getIntervals(value);
+
+        if (rangeStart === null || rangeEnd === null || intervals === null) {
           return null;
         }
 
@@ -23,6 +26,7 @@ export function snapshotValidator(value: unknown): TSnapshot | null {
           state: machineState.PENDING,
           rangeStart,
           rangeEnd,
+          ...intervals,
         };
       }
       case machineState.WORK: {
@@ -31,11 +35,14 @@ export function snapshotValidator(value: unknown): TSnapshot | null {
         const segmentStart = getNumberFieldValue(value, 'segmentStart');
         const workSegmentCount = getNumberFieldValue(value, 'workSegmentCount');
 
+        const intervals = getIntervals(value);
+
         if (
           rangeStart === null ||
           rangeEnd === null ||
           segmentStart === null ||
-          workSegmentCount === null
+          workSegmentCount === null ||
+          intervals === null
         ) {
           return null;
         }
@@ -46,6 +53,7 @@ export function snapshotValidator(value: unknown): TSnapshot | null {
           rangeEnd,
           segmentStart,
           workSegmentCount,
+          ...intervals,
         };
       }
       case machineState.REST: {
@@ -55,12 +63,15 @@ export function snapshotValidator(value: unknown): TSnapshot | null {
         const workSegmentCount = getNumberFieldValue(value, 'workSegmentCount');
         const restKind = getRestKind(value);
 
+        const intervals = getIntervals(value);
+
         if (
           rangeStart === null ||
           rangeEnd === null ||
           segmentStart === null ||
           workSegmentCount === null ||
-          restKind === null
+          restKind === null ||
+          intervals === null
         ) {
           return null;
         }
@@ -72,6 +83,7 @@ export function snapshotValidator(value: unknown): TSnapshot | null {
           segmentStart,
           workSegmentCount,
           restKind,
+          ...intervals,
         };
       }
       case machineState.FINISHED: {

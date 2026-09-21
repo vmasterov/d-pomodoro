@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { snapshotValidator } from './snapshotValidator';
 import { machineState } from '@core/constants/machine.const';
-import { restKind } from '@core/constants/segment.const';
+import { intervals, restKind } from '@core/constants/segment.const';
 import { rangeStart, rangeEnd } from '@testUtils/fixtures';
 import { convertHoursToTimestamp } from '@testUtils/convertHoursToTimestamp';
 
@@ -49,10 +49,13 @@ describe('Тестирование snapshotValidator', () => {
 
   describe('PENDING', () => {
     test('валидный снимок → PENDING', () => {
-      expect(snapshotValidator({ state: machineState.PENDING, rangeStart, rangeEnd })).toEqual({
+      expect(
+        snapshotValidator({ state: machineState.PENDING, rangeStart, rangeEnd, ...intervals }),
+      ).toEqual({
         state: machineState.PENDING,
         rangeStart,
         rangeEnd,
+        ...intervals,
       });
     });
 
@@ -75,6 +78,7 @@ describe('Тестирование snapshotValidator', () => {
       rangeEnd,
       segmentStart,
       workSegmentCount: 2,
+      ...intervals,
     };
 
     test('валидный снимок → WORK', () => {
@@ -107,6 +111,7 @@ describe('Тестирование snapshotValidator', () => {
       segmentStart,
       workSegmentCount: 3,
       restKind: restKind.LONG,
+      ...intervals,
     };
 
     test.each([

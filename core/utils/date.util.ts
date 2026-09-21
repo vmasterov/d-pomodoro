@@ -1,4 +1,5 @@
 import { MS_PER_SECOND, SECONDS_PER_MINUTE } from '@core/constants/common.const';
+import type { TConvertHoursToTimestamp } from '@core/types/utils.type';
 
 export function getTimeFromTimestamp(nowMs: number, timestamp: number, dayOffset = 0): number {
   const dateNow = new Date(nowMs);
@@ -33,4 +34,17 @@ export function convertRemainingMsToFormattedTime(ms: number): string {
   const formatSeconds = String(seconds).padStart(2, '0');
 
   return `${formatMinutes}:${formatSeconds}`;
+}
+
+export function convertHoursToTimestamp({
+  h,
+  m = 0,
+  date,
+  dayOffset = 0,
+}: TConvertHoursToTimestamp): number {
+  const y = date.getFullYear();
+  const M = date.getMonth();
+  const d = date.getDate();
+
+  return new Date(y, M, d + dayOffset, h, m).getTime();
 }

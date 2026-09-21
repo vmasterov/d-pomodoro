@@ -6,8 +6,8 @@ export type TRangeFieldsError = {
 };
 
 export type TTimeRange = {
-  startDate: Date | null;
-  endDate: Date | null;
+  startDate: Date;
+  endDate: Date;
   updateRangeField: (field: Date, type: TFieldType) => void;
   errors?: TRangeFieldsError;
 };
