@@ -1,4 +1,12 @@
-import { Modal, StyleSheet, Text, View, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { Button } from '@/components/Button';
 import { theme } from '@/constants/theme.const';
 import { validateIntervals } from '@core/utils/validateIntervals';
@@ -57,43 +65,45 @@ export function SettingsModal({ onClose, onSave, initIntervals }: TSettingsModal
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
       >
-        <View style={styles.fieldsWrapper}>
-          <View style={styles.content}>
-            <Text style={styles.title}>Настройки</Text>
-            <View>
-              <InputField
-                onChangeText={changeValueHandler}
-                name={'workDuration'}
-                value={intervals.workDuration}
-                label="Продолжительность рабочего сегмента"
-                error={possibleEmptyErrors.workDuration}
-              />
+        <View style={styles.card}>
+          <Text style={styles.title}>Настройки</Text>
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.fields}
+            keyboardShouldPersistTaps="handled"
+          >
+            <InputField
+              onChangeText={changeValueHandler}
+              name={'workDuration'}
+              value={intervals.workDuration}
+              label="Работа, мин"
+              error={possibleEmptyErrors.workDuration}
+            />
 
-              <InputField
-                onChangeText={changeValueHandler}
-                name={'alertWorkTime'}
-                value={intervals.alertWorkTime}
-                label="Уведомление перед отдыхом"
-                error={possibleEmptyErrors.alertWorkTime}
-              />
+            <InputField
+              onChangeText={changeValueHandler}
+              name={'alertWorkTime'}
+              value={intervals.alertWorkTime}
+              label="Сигнал до отдыха, мин"
+              error={possibleEmptyErrors.alertWorkTime}
+            />
 
-              <InputField
-                onChangeText={changeValueHandler}
-                name={'restShort'}
-                value={intervals.restShort}
-                label="Продолжительность короткого сегмента отдыха"
-                error={possibleEmptyErrors.restShort}
-              />
+            <InputField
+              onChangeText={changeValueHandler}
+              name={'restShort'}
+              value={intervals.restShort}
+              label="Короткий отдых, мин"
+              error={possibleEmptyErrors.restShort}
+            />
 
-              <InputField
-                onChangeText={changeValueHandler}
-                name={'restLong'}
-                value={intervals.restLong}
-                label="Продолжительность длинного сегмента отдыха"
-                error={possibleEmptyErrors.restLong}
-              />
-            </View>
-          </View>
+            <InputField
+              onChangeText={changeValueHandler}
+              name={'restLong'}
+              value={intervals.restLong}
+              label="Длинный отдых, мин"
+              error={possibleEmptyErrors.restLong}
+            />
+          </ScrollView>
           <View style={styles.footer}>
             <Button
               onPress={pressSaveButtonHandler}
@@ -114,7 +124,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  fieldsWrapper: {
+  card: {
     backgroundColor: theme.color.screenBg,
     marginTop: 48,
     marginRight: 16,
@@ -122,7 +132,8 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     borderRadius: 28,
     flex: 1,
-    padding: 18,
+    padding: theme.spacing.padding.screen,
+    gap: theme.spacing.gap.m,
     shadowColor: theme.color.primaryText,
     shadowOffset: {
       width: 0,
@@ -132,14 +143,18 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  content: {
+  scroll: {
     flex: 1,
   },
-  footer: {},
+  fields: {
+    gap: theme.spacing.gap.s,
+  },
+  footer: {
+    gap: theme.spacing.gap.m,
+  },
   title: {
-    ...theme.typography.title,
+    ...theme.typography.modalTitle,
     color: theme.color.primaryText,
-    marginVertical: theme.spacing.gap.s,
     textAlign: 'center',
   },
 });

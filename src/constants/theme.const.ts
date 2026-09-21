@@ -36,6 +36,11 @@ export const theme: TTheme = {
     title: {
       fontSize: 38,
       fontWeight: '800',
+      lineHeight: 44,
+    },
+    modalTitle: {
+      fontSize: 28,
+      fontWeight: '800',
       lineHeight: 34,
     },
     subtitle: {
@@ -46,6 +51,7 @@ export const theme: TTheme = {
     label: {
       fontSize: 16,
       fontWeight: '400',
+      lineHeight: 20,
     },
     clock: {
       fontSize: 80,
@@ -54,6 +60,11 @@ export const theme: TTheme = {
     },
     fieldValue: {
       fontSize: 48,
+      fontWeight: '700',
+      fontFamily: 'monospace',
+    },
+    inputValue: {
+      fontSize: 24,
       fontWeight: '700',
       fontFamily: 'monospace',
     },
