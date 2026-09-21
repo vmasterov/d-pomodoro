@@ -18,7 +18,7 @@ export function Layout({ title, subtitle, controls, content }: TLayoutProps) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 32,
+    padding: theme.spacing.padding.screen,
     flex: 1,
     backgroundColor: theme.color.screenBg,
   },
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
 
   controls: {
-    gap: theme.spacing.gap.l,
+    gap: theme.spacing.gap.m,
   },
 
   title: {

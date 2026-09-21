@@ -45,10 +45,12 @@ type TFont = Pick<TextStyle, 'fontSize' | 'fontWeight' | 'fontFamily' | 'lineHei
 
 type TTypography = {
   title: TFont;
+  modalTitle: TFont;
   subtitle: TFont;
   label: TFont;
   clock: TFont;
   fieldValue: TFont;
+  inputValue: TFont;
   button: TFont;
   hint: TFont;
   moreHourDowntime: TFont;

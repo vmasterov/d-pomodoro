@@ -27,10 +27,10 @@ const validators: TValidators = {
       },
     },
     errors: {
-      isInteger: 'Значение должно быть целочисленным',
-      isGreaterThanZero: 'Значение должно быть больше 0',
-      isLessThanOrEqualLimit: `Значение не должно превышать ${LIMIT}`,
-      isGreaterThanAlert: 'Значение должно быть больше, чем сигнал о перерыве',
+      isInteger: 'Только целое число',
+      isGreaterThanZero: 'Должно быть больше 0',
+      isLessThanOrEqualLimit: `Не больше ${LIMIT}`,
+      isGreaterThanAlert: 'Больше сигнала до отдыха',
     },
   },
   alertWorkTime: {
@@ -48,9 +48,9 @@ const validators: TValidators = {
       },
     },
     errors: {
-      isInteger: 'Значение должно быть целочисленным',
-      isGreaterThanZero: 'Значение должно быть больше 0',
-      isLessThanWorkDuration: 'Значение должно быть меньше длительности рабочего сегмента',
+      isInteger: 'Только целое число',
+      isGreaterThanZero: 'Должно быть больше 0',
+      isLessThanWorkDuration: 'Меньше длительности работы',
     },
   },
   restLong: {
@@ -63,10 +63,10 @@ const validators: TValidators = {
       isGreaterThanRestShort,
     },
     errors: {
-      isInteger: 'Значение должно быть целочисленным',
-      isGreaterThanZero: 'Значение должно быть больше 0',
-      isLessThanOrEqualLimit: `Значение не должно превышать ${LIMIT}`,
-      isGreaterThanRestShort: 'Значение должно быть длиннее, чем короткий перерыв',
+      isInteger: 'Только целое число',
+      isGreaterThanZero: 'Должно быть больше 0',
+      isLessThanOrEqualLimit: `Не больше ${LIMIT}`,
+      isGreaterThanRestShort: 'Больше короткого отдыха',
     },
   },
   restShort: {
@@ -79,10 +79,10 @@ const validators: TValidators = {
       isLessThanRestLong: isGreaterThanRestShort,
     },
     errors: {
-      isInteger: 'Значение должно быть целочисленным',
-      isGreaterThanZero: 'Значение должно быть больше 0',
-      isLessThanOrEqualLimit: `Значение не должно превышать ${LIMIT}`,
-      isLessThanRestLong: 'Значение должно быть короче, чем длинный перерыв',
+      isInteger: 'Только целое число',
+      isGreaterThanZero: 'Должно быть больше 0',
+      isLessThanOrEqualLimit: `Не больше ${LIMIT}`,
+      isLessThanRestLong: 'Меньше длинного отдыха',
     },
   },
 };
@@ -96,7 +96,7 @@ const validateField = <
   validator: TValidator<Value, Cross>,
 ) => {
   if (value === null) {
-    return 'Поле обязательно для заполнения';
+    return 'Обязательное поле';
   }
 
   const { valueRules, crossRules, errors } = validator;
