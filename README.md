@@ -1,56 +1,74 @@
-# Welcome to your Expo app 👋
+# VM таймер
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Адаптивный Pomodoro-таймер для Android. Пользователь задаёт рабочий диапазон дня, а приложение чередует сегменты работы и отдыха и напоминает о перерывах уведомлениями — в том числе когда приложение свёрнуто. Это не планировщик: пользователь реагирует на сигналы, а не следит за расписанием.
 
-## Get started
+**Стек:** React Native 0.86 · Expo SDK 57 · React 19.2 (React Compiler) · TypeScript · AsyncStorage · expo-notifications · Vitest · ESLint + Prettier
 
-1. Install dependencies
+## Возможности
 
-   ```bash
-   npm install
-   ```
+- Рабочий диапазон с валидацией времени начала и конца.
+- Чередование работы и отдыха с рекомендацией короткого или длинного перерыва.
+- Уведомления по точным будильникам: предупреждение до конца сегмента, конец сегмента, конец диапазона.
+- Настраиваемые длительности с проверкой на лету и перекрёстными правилами между полями.
+- Восстановление состояния после перезапуска: сегмент, начатый до закрытия приложения, продолжается с верным остатком времени.
 
-2. Start the app
+## Архитектура
 
-   ```bash
-   npx expo start
-   ```
+Логика построена как конечный автомат из пяти состояний — `SETUP`, `PENDING`, `WORK`, `REST`, `FINISHED` — с чистой функцией перехода `reduce(snapshot, event, nowMs)`. Снимок состояния — размеченное объединение, поэтому каждый экран получает ровно те данные, которые существуют в его состоянии, а полноту обработки состояний проверяет компилятор.
 
-In the output, you'll find options to open the app in a
+Код разделён на слои по схеме «порты и адаптеры»:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+| Слой | Ответственность |
+| --- | --- |
+| `core/` | Домен: переходы, селекторы, правила валидации. Чистый TypeScript без зависимостей от платформы. |
+| `storage/` | Персистентность: адаптер AsyncStorage и валидаторы данных на границе. |
+| `notifications/` | Расчёт расписания уведомлений (чистая часть) и адаптер expo-notifications. |
+| `src/` | UI: экраны, компоненты, тема и хук `useMachine`, связывающий автомат с React. |
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Зависимости направлены в одну сторону: `src`, `storage` и `notifications` зависят от `core`, ядро не зависит ни от чего. Благодаря этому доменная логика и расчёт уведомлений тестируются в Node без эмулятора и устройства.
 
-## Get a fresh project
+## Качество кода
 
-When you're ready, run:
+- Юнит-тесты на Vitest: переходы автомата, селекторы, валидаторы хранилища, расчёт уведомлений.
+- ESLint (flat config) и Prettier, lint-staged и git-хуки, conventional commits.
+- Алиасы импортов (`@core/*`, `@storage/*`, `@notifications/*`, `@/*`), общие для TypeScript и Vitest.
+
+## Запуск
 
 ```bash
-npm run reset-project
+npm install
+npm run test:run     # тесты
+npm run lint         # линтер
+npx tsc --noEmit     # проверка типов
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Требуются Node.js, JDK и Android SDK по требованиям React Native 0.86.
 
-### Other setup steps
+## Сборка
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Нативный проект `android/` хранится в репозитории и содержит настройки, которые не порождаются из `app.json`: подпись, разрешение точных будильников, иконка, splash и тема. Поэтому `expo prebuild` не используется, а релиз собирается Gradle.
 
-## Learn more
+Ключ подписи и пароли хранятся вне репозитория, в `~/.gradle/gradle.properties`:
 
-To learn more about developing your project with Expo, look at the following resources:
+```properties
+DPOMODORO_STORE_FILE=/path/to/release.keystore
+DPOMODORO_STORE_PASSWORD=...
+DPOMODORO_KEY_ALIAS=...
+DPOMODORO_KEY_PASSWORD=...
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+cd android
+./gradlew assembleRelease
+adb install -r app/build/outputs/apk/release/app-release.apk
+```
 
-## Join the community
+Отладочная сборка ставится отдельным приложением (`applicationIdSuffix ".debug"`) и не затрагивает данные релизной версии.
 
-Join our community of developers creating universal apps.
+## TODO
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Parse вместо validate.** `validateIntervals` будет возвращать и ошибки, и уже разобранные интервалы (`TSegmentIntervals | null`). Сужение типа переедет внутрь валидатора, и из обработчика сохранения уйдут ручные проверки заполненности полей.
+- **Тесты на `validateIntervals`.** Каждое поле с каждым правилом, границы (0, 1, максимум, максимум + 1), пустое значение у самого поля и у соседнего.
+- **Синхронизация при возврате из фона.** Подписка на `AppState` в `useMachine`: при переходе в `active` время пересчитывается сразу, не дожидаясь следующего тика.
+- **Свой звук уведомлений.** Сначала один общий, затем отдельный для каждого типа уведомления.
+- **Модальное окно настроек.** Затемнённая подложка или полноэкранная модалка вместо текущей карточки.

@@ -1,4 +1,5 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { useMachine } from '@/hooks/useMachine';
 import type { TSnapshot } from '@core/types/snapshot.type';
 import { machineState } from '@core/constants/machine.const';
@@ -53,5 +54,10 @@ export default function App() {
     }
   };
 
-  return <SafeAreaProvider>{showScreen(snapshot)}</SafeAreaProvider>;
+  return (
+    <SafeAreaProvider>
+      <StatusBar style="dark" />
+      {showScreen(snapshot)}
+    </SafeAreaProvider>
+  );
 }

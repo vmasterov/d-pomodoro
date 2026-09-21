@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "d-pomodoro",
+    "name": "VM таймер",
     "slug": "d-pomodoro",
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "dpomodoro",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.anonymous.dpomodoro"
