@@ -29,7 +29,7 @@ export type TRestLongValueRules = {
 };
 
 export type TRestLongCrossRules = {
-  isGreaterThanRestSmall: TCrossRule;
+  isGreaterThanRestShort: TCrossRule;
 };
 
 export type TRestShortValueRules = {

@@ -1,15 +1,7 @@
 import { StyleSheet, Text, TextInput } from 'react-native';
 import { convertValueToString } from '@/utils/convertValueToString';
 import { theme } from '@/constants/theme.const';
-import type { TPossibleEmptySegmentIntervals } from '@core/types/common.type';
-
-export type TInputFieldProps = {
-  onChangeText: (value: string, name: keyof TPossibleEmptySegmentIntervals) => void;
-  name: keyof TPossibleEmptySegmentIntervals;
-  value: number | null;
-  label: string;
-  error: string | null;
-};
+import type { TInputFieldProps } from '@/types/components/inputField.type';
 
 export function InputField({ onChangeText, name, value, label, error }: TInputFieldProps) {
   return (

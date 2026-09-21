@@ -9,20 +9,14 @@ import type { TTimeRange } from '@/types/components/timeRange.type';
 import { intervals as initialIntervals } from '@core/constants/segment.const';
 import { SettingsModal } from '@/components/SettingsModal';
 import type { TSegmentIntervals } from '@core/types/common.type';
+import { getInitDate } from '@/utils/getInitDate';
 
 export function Setup({ setupStart }: TSetupProps) {
   const [intervals, setIntervals] = useState<TSegmentIntervals>(initialIntervals);
-  const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
-  const [endTimestamp, setEndTimestamp] = useState<number | null>(null);
+  const [startTimestamp, setStartTimestamp] = useState<number>(() => getInitDate().startTimestamp);
+  const [endTimestamp, setEndTimestamp] = useState<number>(() => getInitDate().endTimestamp);
 
-  const startDate = startTimestamp !== null ? new Date(startTimestamp) : null; // Здесь и далее не использую useMemo из-за React Compiler
-  const endDate = endTimestamp !== null ? new Date(endTimestamp) : null;
-
-  const isFieldsFilled = startTimestamp !== null && endTimestamp !== null;
-
-  const endError = isFieldsFilled && startTimestamp >= endTimestamp ? 'Конец раньше начала' : '';
-
-  const isDisabled = !(isFieldsFilled && !endError);
+  const endError = startTimestamp >= endTimestamp ? 'Конец раньше начала' : '';
 
   const updateRangeFieldHandler: TTimeRange['updateRangeField'] = (field, type) => {
     const timestamp = field.getTime();
@@ -35,10 +29,6 @@ export function Setup({ setupStart }: TSetupProps) {
   };
 
   const onPressHandler = () => {
-    if (!isFieldsFilled) {
-      return;
-    }
-
     const settings = { startTimestamp, endTimestamp, ...intervals };
 
     setupStart(settings);
@@ -70,6 +60,13 @@ export function Setup({ setupStart }: TSetupProps) {
     setIsSettingsModalVisible(false);
   };
 
+  const saveIntervalSettingsHandler = (intervalsFromModal: TSegmentIntervals) => {
+    const settings = { startTimestamp, endTimestamp, ...intervalsFromModal };
+
+    setIntervals(intervalsFromModal);
+    void saveSettings(settings);
+  };
+
   const openSettingsModal = () => {
     setIsSettingsModalVisible(true);
   };
@@ -85,19 +82,27 @@ export function Setup({ setupStart }: TSetupProps) {
       content={
         <>
           <TimeRange
-            startDate={startDate}
-            endDate={endDate}
+            startDate={new Date(startTimestamp)}
+            endDate={new Date(endTimestamp)}
             updateRangeField={updateRangeFieldHandler}
             errors={{ endDateErrorText: endError }}
           />
           {isSettingsModalVisible && (
-            <SettingsModal onClose={settingsModalCloseHandler} initIntervals={intervals} />
+            <SettingsModal
+              onClose={settingsModalCloseHandler}
+              onSave={saveIntervalSettingsHandler}
+              initIntervals={intervals}
+            />
           )}
         </>
       }
       controls={
         <>
-          <Button onPress={onPressHandler} variant={buttonVariant.ACCENT} disabled={isDisabled}>
+          <Button
+            onPress={onPressHandler}
+            variant={buttonVariant.ACCENT}
+            disabled={Boolean(endError)}
+          >
             Старт
           </Button>
           <Button onPress={openSettingsModal} variant={buttonVariant.DEFAULT}>

@@ -30,3 +30,7 @@ export async function loadSettings(): Promise<TSettings | null> {
 export async function saveSettings(settings: TSettings): Promise<void> {
   await setStorageData(SETTINGS_KEY, settings);
 }
+
+export async function clearSettings(): Promise<void> {
+  await delStorageData(SETTINGS_KEY);
+}

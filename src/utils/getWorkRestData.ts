@@ -26,7 +26,7 @@ export function getWorkRestData(
   const restInfoText = isNegativeTime ? 'Переход к отдыху просрочен на' : 'До начала отдыха';
   const workInfoText = isNegativeTime ? 'Переход к работе просрочен на' : 'До начала работы';
 
-  const isMoreHourDowntime = Math.abs(currentRemainingMs) >= MS_PER_HOUR;
+  const isMoreHourDowntime = currentRemainingMs <= 0 && Math.abs(currentRemainingMs) >= MS_PER_HOUR;
 
   return {
     formattedTime,

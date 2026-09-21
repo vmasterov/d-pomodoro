@@ -9,4 +9,5 @@ export const buttonMod = {
   FIELD: 'field',
 } as const;
 
-export const TIMEPICKER_PLACEHOLDER = '--:--';
+export const DEFAULT_WORK_START_HOUR = 9;
+export const DEFAULT_WORK_END_HOUR = 18;

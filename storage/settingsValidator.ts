@@ -1,7 +1,7 @@
 import type { TSettings } from '@core/types/common.type';
-import { getNumberFieldValue } from './utils/getNumberFieldValue';
+import { getNumberFieldValue } from '@storage/utils/getNumberFieldValue';
 import { intervals } from '@core/constants/segment.const';
-import { validateIntervals } from '@core/utils/validateIntervals';
+import { getIntervals } from '@storage/utils/getIntervals';
 
 export function settingsValidator(value: unknown): TSettings | null {
   if (
@@ -18,47 +18,10 @@ export function settingsValidator(value: unknown): TSettings | null {
       return null;
     }
 
-    const workDuration = getNumberFieldValue(value, 'workDuration');
-    const alertWorkTime = getNumberFieldValue(value, 'alertWorkTime');
-    const restShort = getNumberFieldValue(value, 'restShort');
-    const restLong = getNumberFieldValue(value, 'restLong');
-
-    if (
-      workDuration === null ||
-      alertWorkTime === null ||
-      restShort === null ||
-      restLong === null
-    ) {
-      return {
-        startTimestamp,
-        endTimestamp,
-        ...intervals,
-      };
-    }
-
-    const intervalsFromStorage = {
-      workDuration,
-      alertWorkTime,
-      restShort,
-      restLong,
-    };
-
-    const isIntervalErrors = Object.values(validateIntervals(intervalsFromStorage)).some(
-      (intervalField) => intervalField,
-    );
-
-    if (isIntervalErrors) {
-      return {
-        startTimestamp,
-        endTimestamp,
-        ...intervals,
-      };
-    }
-
     return {
       startTimestamp,
       endTimestamp,
-      ...intervalsFromStorage,
+      ...(getIntervals(value) ?? intervals),
     };
   }
 

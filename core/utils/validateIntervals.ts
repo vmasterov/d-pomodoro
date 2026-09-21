@@ -2,7 +2,7 @@ import type { TCrossRule, TValidator, TValidators, TValueRule } from '@core/type
 import { LIMIT } from '@core/constants/segment.const';
 import type { TPossibleEmptySegmentIntervals } from '@core/types/common.type';
 
-const isGreaterThanRestSmall = (intervals: TPossibleEmptySegmentIntervals) => {
+const isGreaterThanRestShort = (intervals: TPossibleEmptySegmentIntervals) => {
   if (intervals.restLong !== null && intervals.restShort !== null) {
     return intervals.restLong > intervals.restShort;
   }
@@ -60,15 +60,13 @@ const validators: TValidators = {
       isLessThanOrEqualLimit: (restLong: number) => restLong <= LIMIT,
     },
     crossRules: {
-      isGreaterThanRestSmall: (intervals: TPossibleEmptySegmentIntervals) => {
-        return isGreaterThanRestSmall(intervals);
-      },
+      isGreaterThanRestShort,
     },
     errors: {
       isInteger: 'Значение должно быть целочисленным',
       isGreaterThanZero: 'Значение должно быть больше 0',
       isLessThanOrEqualLimit: `Значение не должно превышать ${LIMIT}`,
-      isGreaterThanRestSmall: 'Значение должно быть длиннее, чем короткий перерыв',
+      isGreaterThanRestShort: 'Значение должно быть длиннее, чем короткий перерыв',
     },
   },
   restShort: {
@@ -78,9 +76,7 @@ const validators: TValidators = {
       isLessThanOrEqualLimit: (restShort: number) => restShort <= LIMIT,
     },
     crossRules: {
-      isLessThanRestLong: (intervals: TPossibleEmptySegmentIntervals) => {
-        return isGreaterThanRestSmall(intervals);
-      },
+      isLessThanRestLong: isGreaterThanRestShort,
     },
     errors: {
       isInteger: 'Значение должно быть целочисленным',

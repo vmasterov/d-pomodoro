@@ -17,4 +17,4 @@ export const intervals = Object.freeze({
   restLong: REST_DURATION_LONG,
 });
 
-export const LIMIT = 240 as const;
+export const LIMIT = 59 as const;
